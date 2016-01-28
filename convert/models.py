@@ -14,8 +14,8 @@ class Database(models.Model):
 
     TYPE_DB_CHOICES = (
         (POSTGRES, 'PostgreSQL'),
-        (MYSQL, 'MY'),
-        (MONGODB, 'MO')
+        (MYSQL, 'MySQL'),
+        (MONGODB, 'MongoDB')
     )
 
     type = models.CharField(max_length=2,
@@ -24,7 +24,7 @@ class Database(models.Model):
     db_name = models.CharField(max_length=255)
     db_user = models.CharField(max_length=255)
     db_address = models.CharField(max_length=255)
-    db_password = models.CharField(max_length=255)
+#    db_password = models.CharField(max_length=255)
 
 
 class ConvertedDatabase(models.Model):
@@ -47,6 +47,7 @@ class ConvertedDatabase(models.Model):
     status = models.CharField(max_length=2,
                               choices=CONVERT_STATUS_CHOICES,
                               default=OK)
+    celery_id = models.IntegerField(default=0)
     completed = models.SmallIntegerField(default=0)
 
 
