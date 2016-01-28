@@ -1,0 +1,47 @@
+{% extends 'base-account.html' %}
+
+{% block activate-follow %}
+    active
+{% endblock %}
+{% block activate-graphs %}
+active
+{% endblock %}
+
+{% block right-content %}
+
+    <div class="content-page">
+        <!-- Start content -->
+        <div class="content">
+            <div class="container">
+                <!-- Page-Title -->
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4 class="page-title">Графики активности</h4>
+                    </div>
+                    <br>
+                    <div class="col-lg-8">
+                        <div class="card-box">
+                            <h4 class="text-dark header-title m-t-0">Sales Analytics</h4>
+
+                            <div class="text-center">
+                                <ul class="list-inline chart-detail-list">
+                                    <li>
+                                        <h5><i class="fa fa-circle m-r-5" style="color: #5fbeaa;"></i>Desktops</h5>
+                                    </li>
+                                    <li>
+                                        <h5><i class="fa fa-circle m-r-5" style="color: #5d9cec;"></i>Tablets</h5>
+                                    </li>
+                                    <li>
+                                        <h5><i class="fa fa-circle m-r-5" style="color: #dcdcdc;"></i>Mobiles</h5>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div id="morris-bar-stacked" style="height: 303px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Администрирование</title>
+    <link rel="stylesheet" type="text/css" href="/plugins/jquery.steps/demo/css/jquery.steps.css" />
+    <link href="/plugins/custombox/dist/custombox.min.css" rel="stylesheet">
+
+    <!--Morris Chart CSS -->
+    <link rel="stylesheet" href="/plugins/morris/morris.css">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/core.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/components.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" href="/css/icons.css" type="text/css"/>
+    <link href="/css/pages.css" rel="stylesheet" type="text/css"/>
+    <link href="/css/responsive.css" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <script src="/js/modernizr.min.js"></script>
+
+</head>
+
+
+<body class="fixed-left">
+<div id="wrapper">
+    <div class="topbar">
+        <div class="topbar-left">
+            <div class="text-center">
+                <a href="{% url 'view-home' %}" class="logo"><i class=" icon-compass icon-c-logo"></i>
+                    <span>Трансформатор</span></a>
+            </div>
+        </div>
+
+        <!-- Button mobile view to collapse sidebar menu -->
+        <div class="navbar navbar-default" role="navigation">
+            <div class="container">
+                <div class="">
+                    <div class="pull-left">
+                        <button class="button-menu-mobile open-left">
+                            <i class="ion-navicon"></i>
+                        </button>
+                        <span class="clearfix"></span>
+                    </div>
+
+                    <ul class="nav navbar-nav navbar-right pull-right">
+                        <li class="hidden-xs">
+                            <a href="#" id="btn-fullscreen" class="waves-effect waves-light"><i
+                                    class="icon-size-fullscreen"></i></a>
+                        </li>
+                        <li><a><i class="ti-user m-r-5"></i> Профиль</a></li>
+                        <li><a><i class="ti-settings m-r-5"></i> Настройки</a></li>
+                        <li><a><i class="ti-power-off m-r-5"></i> Выход</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== Left Sidebar Start ========== -->
+
+    <div class="left side-menu">
+        <div class="sidebar-inner slimscrollleft">
+            <div id="sidebar-menu">
+                <ul>
+
+                    <li class="text-muted menu-title">Навигация по сайту</li>
+                    <li><a href="{% url 'view-account' %}"
+                           class="waves-effect {% block activate-home %} {% endblock %}">
+                        <i class="ti-home"></i> Ваши БД</a>
+                    </li>
+
+
+                    <li class="has_sub">
+                        <a href="#" class="waves-effect"><i class="md md-search"></i> <span> Управление БД </span>
+                        </a>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Создать пользователей</a></li>
+                            <li><a href="#">Удаление БД</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="has_sub">
+                        <a href="#" class="waves-effect {% block activate-follow %} {% endblock %}">
+                            <i class="ion-arrow-graph-up-right"></i>
+                            <span> Отслеживать Ваши БД </span> </a>
+                        <ul class="list-unstyled">
+                            <li class="{% block activate-graphs %} {% endblock %}"><a href="{% url 'view-graphs' %}">Графики
+                                активности</a></li>
+                            <li><a href="#">Активность пользователей</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    {% block right-content %}
+    {% endblock %}
+    <footer class="footer text-right">
+        © 2016
+    </footer>
+</div>
+<!-- END wrapper -->
+
+
+<script>
+    var resizefunc = [];
+</script>
+
+<!-- jQuery  -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/detect.js"></script>
+<script src="/js/fastclick.js"></script>
+<script src="/js/jquery.slimscroll.js"></script>
+<script src="/js/jquery.blockUI.js"></script>
+<script src="/js/waves.js"></script>
+<script src="/js/wow.min.js"></script>
+<script src="/js/jquery.nicescroll.js"></script>
+<script src="/js/jquery.scrollTo.min.js"></script>
+
+
+<script src="/js/jquery.core.js"></script>
+<script src="/js/jquery.app.js"></script>
+
+<!--Form Validation-->
+<script src="/plugins/bootstrapvalidator/dist/js/bootstrapValidator.js" type="text/javascript"></script>
+
+<!--Form Wizard-->
+<script src="/plugins/jquery.steps/build/jquery.steps.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="/plugins/jquery-validation/dist/jquery.validate.min.js"></script>
+
+<!--wizard initialization-->
+<script src="/pages/jquery.wizard-init.js" type="text/javascript"></script>
+
+<script src="/plugins/switchery/dist/switchery.min.js"></script>
+
+<script src="/plugins/custombox/dist/custombox.min.js"></script>
+<script src="/plugins/custombox/dist/legacy.min.js"></script>
+
+<script src="/js/script.js"></script>
+
+<script type="text/javascript">
+    jQuery(document).ready(function ($) {
+        $('.counter').counterUp({
+            delay: 100,
+            time: 1200
+        });
+
+        $(".knob").knob();
+
+    });
+</script>
+
+</body>
+</html>

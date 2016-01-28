@@ -1,4 +1,150 @@
-{% extends "base.html" %}
-{% block main %}
+{% extends "base-account.html" %}
+
+{% block right-content %}
+    <div class="content-page">
+        <div class="content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-ld-12">
+                        <div class="card-box">
+                            <form id="basic-form" action={% url 'view-choose-tables' %}>
+                                <div>
+                                    <h3>MySQL</h3>
+                                    <section>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <img src="/images/mysql.jpg" alt="image"
+                                                     class="img-responsive img-circle"/>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <div class="col-md-9">
+
+                                                    <div class="form-group clearfix">
+                                                        <label class="col-lg-4 control-label " for="my-name"> Название
+                                                            БД
+                                                        </label>
+
+                                                        <div class="col-lg-8">
+                                                            <input id="my-name" name="my-name" type="text"
+                                                                   class="required form-control">
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group clearfix">
+                                                        <label class="col-lg-4 control-label" for="my-port"> Порт
+                                                        </label>
+
+                                                        <div class="col-lg-8">
+                                                            <input id="my-port" name="my-port" type="text"
+                                                                   class="required form-control">
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group clearfix">
+                                                        <label class="col-lg-4 control-label" for="my-user">
+                                                            Пользователь
+                                                        </label>
+
+                                                        <div class="col-lg-8">
+                                                            <input id="my-user" name="my-user" type="text"
+                                                                   class="required form-control">
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group clearfix">
+                                                        <label class="col-lg-4 control-label" for="my-password">Пароль
+                                                        </label>
+
+                                                        <div class="col-lg-8">
+                                                            <input id="my-password" name="my-password" type="password"
+                                                                   class="required form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <h3>MongoDB</h3>
+                                    <section>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <img src="/images/mongo.png" alt="image"
+                                                     class="img-responsive img-circle"/>
+                                            </div>
+                                            <div class="form-group clearfix">
+                                                <div class="col-md-9">
+
+                                                    <div class="form-group clearfix">
+                                                        <label class="col-lg-4 control-label " for="mo-name"> Название
+                                                            БД
+                                                        </label>
+
+                                                        <div class="col-lg-8">
+                                                            <input id="mo-name" name="mo-name" type="text"
+                                                                   class="required form-control">
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group clearfix">
+                                                        <label class="col-lg-4 control-label" for="mo-port"> Порт
+                                                        </label>
+
+                                                        <div class="col-lg-8">
+                                                            <input id="mo-port" name="mo-port" type="text"
+                                                                   class="required form-control">
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group clearfix">
+                                                        <label class="col-lg-4 control-label" for="mo-user">
+                                                            Пользователь
+                                                        </label>
+
+                                                        <div class="col-lg-8">
+                                                            <input id="mo-user" name="mo-user" type="text"
+                                                                   class="required form-control">
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group clearfix">
+                                                        <label class="col-lg-4 control-label" for="mo-password">Пароль
+                                                        </label>
+
+                                                        <div class="col-lg-8">
+                                                            <input id="mo-password" name="mo-password" type="password"
+                                                                   class="required form-control">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <h3>Agree to connect</h3>
+                                    <section>
+                                        <div class="form-group clearfix">
+                                            <div class="col-lg-12">
+                                                <div class="checkbox checkbox-primary">
+                                                    <input id="checkbox-h" type="checkbox">
+                                                    <label for="checkbox-h">
+                                                        I agree with the Terms and Conditions.
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

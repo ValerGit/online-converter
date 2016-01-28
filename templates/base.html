@@ -2,9 +2,150 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>привет</title>
+    <title>Супер транслятор</title>
+    <link rel="stylesheet" href="/css/materialize.min.css">
+    <link rel="stylesheet" href="/css/icon.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
-<body>
-    {% block main %}{% endblock %}
+<body class="white">
+{% block rigistered_user %}
+<nav class="nav-wrapper white">
+    <div class="row">
+        <div class="col s4 offset-s1">
+            <a href="{% url 'view-home' %}" class="brand-logo black-text light italic" >Трансформатор</a>
+        </div>
+            <div class="col s1 offset-s8">
+                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                    <li><a href="{% url 'view-sign-in' %}" class="black-text">Вход</a></li>
+                </ul>
+            </div>
+            <div class="col s1 ">
+                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                    <li><a href="{% url 'view-sign-up' %}" class="black-text">Регистрация</a></li>
+                </ul>
+            </div>
+    </div>
+</nav>
+{% endblock %}
+
+<main>
+    {% block main %}
+        <div class="parallax-container mongo">
+            <div class="center-align"><img src="images/logo.png"></div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                <div class="col s12 center-align">
+                    <div class="divider"></div>
+                    <h3 class="special-font italic">Экономьте <span class="bold"> время и ресурсы </span>
+                        <span class="thin">  кэшируя данные в постреляционную БД</span>
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <div class="center-align">
+                        <a href="#create" class="btn btn-large green darken-1">Зарегестрироваться
+                            <i class="material-icons right">vpn_key</i>
+                        </a>
+                        <a href="#learn" class="btn btn-large white grey-text hero-btn">Узнать больше</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="parallax-container">
+            <div class="parallax"><img src="images/clocks.jpg"></div>
+        </div>
+
+        <div class="spacer"></div>
+        <div class="row center">
+
+            <h3 class="thin center">Транслируйте свои БД и следите за их производительностью</h3>
+
+            <div class="section"></div>
+            <div id="feature-table" >
+                <div class="col s4 offset-s4 feature-item">
+                    <p class="flow-text green-text"><a class="green-text">Онлайн конвертация</a>
+                        <i class="material-icons right purple-text">done</i>
+                    </p>
+                </div>
+                <div class="col s4 offset-s4 feature-item">
+                    <p class="flow-text"><a class="green-text">Пульс данных</a>
+                        <i class="material-icons right red-text">done</i>
+                    </p>
+                </div>
+                <div class="col s4 offset-s4 feature-item">
+                    <p class="flow-text"><a class="green-text">Надежность</a>
+                        <i class="material-icons right blue-text">done</i>
+                    </p>
+                </div>
+                <div class="col s4 offset-s4 feature-item">
+                    <p class="flow-text"><a class="green-text">Высокая скорость</a>
+                        <i class="material-icons right green-text">done</i>
+                    </p>
+                </div>
+                <div class="col s4 offset-s4 feature-item">
+                    <p class="flow-text"><a class="green-text">Безопасность</a>
+                        <i class="material-icons right yellow-text">done</i>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    {% endblock %}
+</main>
+
+{% block bottom-footer %}
+    <footer class="page-footer grey lighten-4">
+        <div class="container row">
+            <div class="col s12 m6">
+                <div>
+                    <a class="grey-text">
+                        <h7>О нас</h7>
+                    </a>
+                </div>
+                <div>
+                    <a class="grey-text">
+                        <h7>Графики</h7>
+                    </a>
+                </div>
+                <div>
+                    <a class="grey-text" href="mailto:v.pershenkova@gmail.com">
+                        <h7>Свяжись с нами</h7>
+                    </a>
+                </div>
+            </div>
+            <div class="col s12 m6">
+                <div>
+                    <a class="grey-text">
+                        <h7>FAQ</h7>
+                    </a>
+                </div>
+                <div>
+                    <a class="grey-text">
+                        <h7>Выйти</h7>
+                    </a>
+                </div>
+                <div>
+                    <a class="grey-text">
+                        <h7>Узнать больше</h7>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container grey-text">
+                © 2016
+                <span class="right" href="#!">Сделано в Москве</span>
+            </div>
+        </div>
+    </footer>
+{% endblock %}
+
+
+<script type="text/javascript" src="/js/jquery-2.1.1.min.js"></script>
+<script src="/js/materialize.min.js"></script>
+<script src="/js/script.js"></script>
 </body>
 </html>

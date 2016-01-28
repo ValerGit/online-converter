@@ -1,4 +1,47 @@
 {% extends "base.html" %}
 {% block main %}
-
+    <div class="spacer"></div>
+    <div class="row">
+        <div class="col s6 offset-s2">
+            <div class="row">
+                <a class="registration">Вход</a>
+            </div>
+        </div>
+    </div>
+    <div class="col s6">
+        <div class="row">
+            <div class="col s4 offset-s1">
+                <div class="input-field col s12">
+                    <input id="email" type="email" class="validate">
+                    <label for="email">Имя пользователя</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s4 offset-s1">
+                <div class="input-field col s12">
+                    <input id="password" type="password" class="validate">
+                    <label for="password">Пароль
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6 offset-s1">
+                <div class="input-field col s12">
+                    <button class="btn waves-effect waves-light green darken-1" type="submit" name="action">Войти
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s6 offset-s1">
+                <div class="input-field col s12">
+                    <button class="btn waves-effect waves-light black">
+                        <a href={% url 'view-sign-up' %} class="white-text">Зарегестрироваться</a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
