@@ -47,7 +47,7 @@ class ConvertedDatabase(models.Model):
     status = models.CharField(max_length=2,
                               choices=CONVERT_STATUS_CHOICES,
                               default=OK)
-    celery_id = models.IntegerField(default=0)
+    celery_id = models.CharField(max_length=50)
     completed = models.SmallIntegerField(default=0)
 
 
