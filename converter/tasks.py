@@ -37,7 +37,7 @@ def convert_to_mongo(self, data):
         user=data['from']['user'],
         passwd=data['from']['password'],
         db=data['from']['db'],
-        cursorclass=MySQLdb.cursors.DictCursor
+        cursorclass=MySQLdb.cursors.SSDictCursor
     )
 
     uri = 'mongodb://'
@@ -49,9 +49,6 @@ def convert_to_mongo(self, data):
     mongo_db = client[data['to']['db']]
 
     cur = db.cursor()
-    # cur.execute("show tables")
-    # for row in cur.fetchall():
-    #     logger.info(row[0])
 
     for t in data['tables']:
         if not t['isEmbedded']:
@@ -59,13 +56,29 @@ def convert_to_mongo(self, data):
 
 
 def convert(tables, current_table, cursor, mongo_db):
-    cursor.execute('SELECT * FROM ' + current_table['name'])
-    collection = mongo_db[current_table['name']]
-    for row in cursor.fetchall():
-        inserted_id = collection.insert_one(row).inserted_id
-        print inserted_id
-        break
+    cursor.execute('SELECT COUNT(*) as cnt FROM ' + current_table['name'])
+    quantity = cursor.fetchone()['cnt']
+    cursor.fetchall()  # free result
+    MAX_CHUNK = 10000
+    for i in range(quantity / MAX_CHUNK + 1):
+        cursor.execute(
+            'SELECT * FROM ' + current_table['name'] + ' LIMIT ' + str(MAX_CHUNK * i) + ', ' + str(MAX_CHUNK)
+        )
+        if not current_table['isEmbedded']:
+            collection = mongo_db[current_table['name']]
+            for row in cursor.fetchall():
+                inserted_id = collection.insert_one(row).inserted_id
+                print inserted_id
+        else:
+            for row in cursor.fetchall():
+                mongo_db[current_table['embeddedIn']].find_one_and_update(
+                    {current_table['parentKey']: row[current_table['selfKey']]},
+                    {
+                        '$push': {current_table['name']: row}
+                    }
+                )
 
     embed = (t for t in tables if t['isEmbedded'] and t['embeddedIn'] == current_table['name'])
+
     for t in embed:
         convert(tables, t, cursor, mongo_db)
