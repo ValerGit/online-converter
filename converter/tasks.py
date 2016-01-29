@@ -29,6 +29,7 @@ from pymongo import MongoClient
 
 logger = get_task_logger(__name__)
 
+
 @app.task(bind=True)
 def convert_to_mongo(self, data):
     logger.info("Start converting...")
