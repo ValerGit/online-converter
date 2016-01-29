@@ -15,7 +15,7 @@
                             <tbody>
                             <tr>
                                 <td>
-                                    <a href="#custom-modal" data-animation="makeway" data-plugin="custommodal"
+                                    <a href="#custom-modal" data-animation="door" data-plugin="custommodal"
                                        data-overlaySpeed="100" data-overlayColor="#36404a">
                                         <button type="button"
                                                 class="btn btn-inverse btn-custom waves-effect waves-light">
@@ -52,12 +52,14 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <select class="form-control select2" name="p_scnt">
+                                        <option></option>
                                         <option>Форум</option>
                                         <option>Select2</option>
                                     </select>
                                 </div>
                                 <div class="col-md-2 ">
                                     <select class="form-control select2">
+                                        <option></option>
                                         <option>id создателя</option>
                                         <option>Select2</option>
                                     </select>
@@ -92,6 +94,14 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-md-5 col-md-offset-4">
+                        <button type="button"
+                                class="btn btn-success waves-effect waves-light">
+                            <h5 class="text-white"><i class="fa fa-check"></i>
+                              Конвертировать </h5>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -103,6 +113,7 @@
         </button>
         <h4 class="custom-modal-title">Пример трасляции</h4>
         <img src="/images/tutor.png" alt="image" class="img-responsive">
+
         <div class="custom-modal-text">
             При необходимости узнать всю информацию о форумах и их создателях, то возможна следующая структура
             построения таблиц в MongoDB. Соотвественно вторичным ключом будет являться «id создателя» форума и по нему
