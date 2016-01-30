@@ -16,22 +16,60 @@
                         <div class="col-md-4">
                             <h3 class="m-t-0 m-b-30 header-title"><b> Структура конвертации </b></h3>
                         </div>
-                        <div class="col-md-2 col-md-offset-3">
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <a href="#custom-modal" data-animation="door" data-plugin="custommodal"
-                                       data-overlaySpeed="100" data-overlayColor="#36404a">
-                                        <button type="button"
-                                                class="btn btn-inverse btn-custom waves-effect waves-light">
-                                            Подсказка
-                                        </button>
-                                    </a>
-                                </td>
-                            </tr>
-                            </tbody>
+                    </div>
+                </div>
+
+                {% if need_db_choose %}
+                    <p class="text-muted m-b-40 font-13 m-h-40"> Выберите MySQL БД для конвертации</p>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <select id="from-db" class="form-control select2">
+                                {% for x in all_mysql %}
+                                    <option>
+                                        {{ x.db_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
+                    <p class="text-muted m-b-20 font-13 m-h-20"></p>
+                    <p class="text-muted m-b-40 font-13 m-h-40"> Выберите MongoDB </p>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <select id="to-db" class="form-control select2">
+                                {% for x in all_mongos %}
+                                    <option>
+                                        {{ x.db_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <p class="text-muted m-b-20 font-13 m-h-50"></p>
+                    <div class="col-md-5 col-md-offset-3">
+                        <button type="button" id="set-dbs"
+                                class="btn btn-block btn-success waves-effect waves-light">
+                            <h5 class="text-white"><i class="fa fa-check"></i>
+                                Выбрать </h5>
+                        </button>
+                    </div>
+                {% else %}
+                    <div class="col-md-2 col-md-offset-3">
+                        <tbody>
+                        <tr>
+                            <td>
+                                <a href="#custom-modal" data-animation="door" data-plugin="custommodal"
+                                   data-overlaySpeed="100" data-overlayColor="#36404a">
+                                    <button type="button"
+                                            class="btn btn-inverse btn-custom waves-effect waves-light">
+                                        Подсказка
+                                    </button>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </div>
+
                     <p class="text-muted m-b-40 font-13 m-h-40"> Выберите таблицы для конвертации</p>
 
                     <div class="box">
@@ -102,19 +140,20 @@
                             </button>
                         </div>
                     </div>
-                </div>
+                    </div>
 
-                <div class="col-md-5 col-md-offset-3">
-                    <button type="button"
-                            class="btn btn-block btn-success waves-effect waves-light">
-                        <h5 class="text-white"><i class="fa fa-check"></i>
-                            Конвертировать </h5>
-                    </button>
-                </div>
-            </div>
+                    <div class="col-md-5 col-md-offset-3">
+                        <button type="button"
+                                class="btn btn-block btn-success waves-effect waves-light">
+                            <h5 class="text-white"><i class="fa fa-check"></i>
+                                Конвертировать </h5>
+                        </button>
+                    </div>
+                {% endif %}
         </div>
     </div>
     </div>
+
     <!-- Modal -->
     <div id="custom-modal" class="modal-demo">
         <button type="button" class="close" onclick="Custombox.close();">
