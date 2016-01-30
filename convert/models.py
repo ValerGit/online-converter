@@ -24,7 +24,7 @@ class Database(models.Model):
     db_name = models.CharField(max_length=255)
     db_user = models.CharField(max_length=255)
     db_address = models.CharField(max_length=255)
-#    db_password = models.CharField(max_length=255)
+    db_password = models.CharField(max_length=255, default='')
 
 
 class ConvertedDatabase(models.Model):

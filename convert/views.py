@@ -6,9 +6,10 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from forms import RegistrationForm
 from celery.result import AsyncResult
-from convert.models import ConvertedDatabase
-from django.http import JsonResponse
+from convert.models import ConvertedDatabase, Database
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
+import json
 
 
 def proceed_convert(request):
@@ -107,3 +108,25 @@ def check_status(request):
         )
     else:
         return JsonResponse({'error': 'Неверный запрос'})
+
+
+@login_required
+def create_db(request):
+    if request.is_ajax():
+        if request.method == "POST":
+            data = json.loads(request.body)
+            for el in data['from']:
+                if not el:
+                    return JsonResponse({'valid': 'no'})
+            for el in data['to']:
+                if not el:
+                    return JsonResponse({'valid': 'no'})
+            db_from = Database(**data['from'])
+            db_from.save()
+            db_to = Database(**data['to'])
+            db_to.save()
+            return JsonResponse({'valid': 'ok', 'from_id': db_from.id, 'to_id': db_to.id})
+        else:
+            return HttpResponseBadRequest()
+    else:
+        return HttpResponseBadRequest()
