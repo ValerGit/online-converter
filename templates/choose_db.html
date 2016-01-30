@@ -207,14 +207,14 @@
                 var mydb = $("#my-name").val();
                 var mypass = $("#my-password").val();
                 var myJson = {
-                    'host': myhost, 'user': myuser, 'db': mydb, 'password': mypass, 'type': 'MY'
+                    'db_address': myhost, 'db_user': myuser, 'db_name': mydb, 'db_password': mypass, 'type': 'MY'
                 }
                 var mohost = $("#mo-host").val();
                 var mouser = $("#mo-user").val();
                 var modb = $("#mo-name").val();
                 var mopass = $("#mo-password").val();
                 var moJson = {
-                    'host': mohost, 'user': mouser, 'db': modb, 'password': mopass, 'type': 'MO'
+                    'db_address': mohost, 'db_user': mouser, 'db_name': modb, 'db_password': mopass, 'type': 'MO'
                 }
                 var finalJson = {
                     'from': myJson, 'to': moJson
@@ -222,7 +222,7 @@
                 if ((myhost == '') || (myuser == '') || (mydb == '') || (mypass == '') || (mohost == '') || (mouser == '') || (modb == '') || (mopass == '')) {
                     swal("Вы указали не все параметры");
                 } else {
-                    $.post("/connect/", finalJson,
+                    $.post("/connect/", JSON.stringify(finalJson),
                             function (data) {
                                 if (data.valid == 'ok') {
                                     $.get("/converting/")
