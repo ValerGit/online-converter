@@ -13,6 +13,7 @@ from convert.models import ConvertedDatabase, Database
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 import json
+from convert.models import Database
 
 
 def proceed_convert(request):
@@ -103,7 +104,16 @@ def ports(request):
 
 
 def tables(request):
-    return render(request, 'convertation.html')
+    from_db = request.REQUEST.get('from')
+    to_db = request.REQUEST.get('to')
+    need_db_choose = 0
+    if not from_db or not to_db:
+        need_db_choose = 1
+        all_mysqls = Database.objects.filter(type="MY")
+        all_mongos = Database.objects.filter(type="MO")
+
+    return render(request, 'convertation.html', {'need_db_choose': need_db_choose, 'all_mysql':all_mysqls,
+                                                 'all_mongos':all_mongos})
 
 
 @login_required
