@@ -32,23 +32,23 @@ class ConvertedDatabase(models.Model):
     database_to = models.ForeignKey('Database')
     date = models.DateTimeField(auto_now_add=True)
 
-    OK = 'OK'
-    IN_PROGRESS = 'IP'
-    CANCELLED = 'CA'
-    ERROR = 'ER'
-
-    CONVERT_STATUS_CHOICES = (
-        (OK, 'OK'),
-        (IN_PROGRESS, 'В прогрессе'),
-        (CANCELLED, 'Отменено'),
-        (ERROR, 'Ошибка')
-    )
-
-    status = models.CharField(max_length=2,
-                              choices=CONVERT_STATUS_CHOICES,
-                              default=OK)
+    # OK = 'OK'
+    # IN_PROGRESS = 'IP'
+    # CANCELLED = 'CA'
+    # ERROR = 'ER'
+    #
+    # CONVERT_STATUS_CHOICES = (
+    #     (OK, 'OK'),
+    #     (IN_PROGRESS, 'В прогрессе'),
+    #     (CANCELLED, 'Отменено'),
+    #     (ERROR, 'Ошибка')
+    # )
+    #
+    # status = models.CharField(max_length=2,
+    #                           choices=CONVERT_STATUS_CHOICES,
+    #                           default=OK)
     celery_id = models.CharField(max_length=50)
-    completed = models.SmallIntegerField(default=0)
+    # completed = models.SmallIntegerField(default=0)
 
 
 class ConvertingNotice(models.Model):
