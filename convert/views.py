@@ -115,6 +115,11 @@ def tables(request):
         return render(request, 'convertation.html', {'need_db_choose': need_db_choose, 'all_mysql':all_mysqls,
                                                  'all_mongos':all_mongos})
 
+    try:
+        from_database = Database.objects.get(id=from_db)
+        to_database = Database.objects.get(id=to_db)
+    except Database.DoesNotExist:
+        return HttpResponseBadRequest()
     return render(request, 'convertation.html', {
         'need_db_choose': need_db_choose
     })
