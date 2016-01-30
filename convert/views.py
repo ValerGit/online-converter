@@ -1,6 +1,11 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import render
 from converter.tasks import convert_to_mongo
-
+from celery.result import AsyncResult
+from convert.models import ConvertedDatabase
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
 
 
 def proceed_convert(request):
@@ -63,3 +68,23 @@ def ports(request):
 
 def tables(request):
     return render(request, 'convertation.html')
+
+
+@login_required
+def check_status(request):
+    if request.method == 'GET':
+        try:
+            converting_database = ConvertedDatabase.objects.get(id=request.GET.get('id'))
+        except ConvertedDatabase.DoesNotExist:
+            return JsonResponse({'error': 'Конвертация не найдена, обратитесь в службу поддержки'})
+        if converting_database.user != request.user:
+            return JsonResponse({'error': 'Конвертация не найдена, обратитесь в службу поддержки'})
+        result = AsyncResult(converting_database.celery_id)
+        return JsonResponse(
+            {
+                'status': result.status,
+                'ready': result.ready()
+            }
+        )
+    else:
+        return JsonResponse({'error': 'Неверный запрос'})

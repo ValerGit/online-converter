@@ -30,6 +30,7 @@ class Database(models.Model):
 class ConvertedDatabase(models.Model):
     database_from = models.ForeignKey('Database')
     database_to = models.ForeignKey('Database')
+    user = models.ForeignKey(User)
     date = models.DateTimeField(auto_now_add=True)
 
     # OK = 'OK'
