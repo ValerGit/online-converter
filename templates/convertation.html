@@ -14,10 +14,22 @@
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-4">
-                            <h3 class="m-t-0 m-b-30 header-title"><b> Структура конвертации </b></h3>
+                            <h3 class="header-title m-h-40"><b> Структура конвертации </b></h3>
                         </div>
+                        {% if not need_db_choose %}
+                            <div class="col-md-2 col-md-offset-5 ">
+                                <a href="#custom-modal" data-animation="door" data-plugin="custommodal"
+                                   data-overlaySpeed="100" data-overlayColor="#36404a">
+                                    <button type="button"
+                                            class="btn btn-block btn-inverse btn-custom waves-effect waves-light">
+                                        Подсказка
+                                    </button>
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
+
 
                 {% if need_db_choose %}
                     <p class="text-muted m-b-40 font-13 m-h-40"> Выберите MySQL БД для конвертации</p>
@@ -54,95 +66,78 @@
                         </button>
                     </div>
                 {% else %}
-                    <div class="col-md-2 col-md-offset-3">
-                        <tbody>
-                        <tr>
-                            <td>
-                                <a href="#custom-modal" data-animation="door" data-plugin="custommodal"
-                                   data-overlaySpeed="100" data-overlayColor="#36404a">
+                    <div class="col-md-12">
+                        <div class="card-box">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="font-13 "> Название таблицы </p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p class="font-13 "> Вложенная таблица </p>
+                                </div>
+                                <div class="col-md-2 ">
+                                    <p class="font-13"> Вторичный ключ на волженную таблицу </p>
+                                </div>
+                                <div class="col-md-2">
+                                    <p class="font-13"> Поле по которому таблица вложена </p>
+                                </div>
+                            </div>
+
+                            <p class="text-muted m-b-20 font-13 m-h-20"></p>
+
+                            <div class="input_fields_wrap">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <select class="form-control select2" name="p_scnt">
+                                            <option></option>
+                                            <option>Форум</option>
+                                            <option>Select2</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-1 switchery-demo">
+                                        <input type="checkbox" checked data-plugin="switchery" data-color="#f05050"/>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <select class="form-control select2">
+                                            <option></option>
+                                            <option>Пользователь</option>
+                                            <option>Select2</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2 ">
+                                        <select class="form-control select2">
+                                            <option></option>
+                                            <option>id создателя</option>
+                                            <option>Select2</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <select class="form-control select2">
+                                            <option></option>
+                                            <option>id пользователя</option>
+                                            <option>Select2</option>
+                                        </select>
+                                    </div>
                                     <button type="button"
-                                            class="btn btn-inverse btn-custom waves-effect waves-light">
-                                        Подсказка
+                                            class="btn btn-danger btn-custom btn-xs btn-rounded waves-effect waves-light remove_field">
+                                        <i class="ion-minus"></i>
                                     </button>
-                                </a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </div>
+                                </div>
+                            </div>
 
-                    <p class="text-muted m-b-40 font-13 m-h-40"> Выберите таблицы для конвертации</p>
+                            <p class="text-muted m-b-20 font-13 m-h-20"></p>
 
-                    <div class="box">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <p class="font-13 m-h-20"> Название таблицы </p>
-                            </div>
-                            <div class="col-md-3">
-                                <p class="font-13 m-h-20"> Вложенная таблица </p>
-                            </div>
-                            <div class="col-md-2 ">
-                                <p class="font-13 m-h-20"> Вторичный ключ на волженную таблицу </p>
-                            </div>
-                            <div class="col-md-2">
-                                <p class="font-13 m-h-20"> Поле по которому таблица вложена </p>
+                            <div class="row">
+                                <div class="col-md-4 col-md-offset-8 btnCnt">
+                                    <button type="button"
+                                            class="btn btn-block btn-success btn-custom btn-rounded waves-effect waves-light add_field_button">
+                                        <h5><i class="ion-plus"> Добавить таблицу</i></h5>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <p class="text-muted m-b-20 font-13 m-h-20"></p>
-
-                    <div class="input_fields_wrap">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <select class="form-control select2" name="p_scnt">
-                                    <option></option>
-                                    <option>Форум</option>
-                                    <option>Select2</option>
-                                </select>
-                            </div>
-                            <div class="col-md-1 switchery-demo">
-                                <input type="checkbox" checked data-plugin="switchery" data-color="#f05050"/>
-                            </div>
-                            <div class="col-md-3">
-                                <select class="form-control select2">
-                                    <option></option>
-                                    <option>Пользователь</option>
-                                    <option>Select2</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2 ">
-                                <select class="form-control select2">
-                                    <option></option>
-                                    <option>id создателя</option>
-                                    <option>Select2</option>
-                                </select>
-                            </div>
-                            <div class="col-md-2">
-                                <select class="form-control select2">
-                                    <option></option>
-                                    <option>id пользователя</option>
-                                    <option>Select2</option>
-                                </select>
-                            </div>
-                            <button type="button"
-                                    class="btn btn-danger btn-custom btn-xs btn-rounded waves-effect waves-light remove_field">
-                                <i class="ion-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <p class="text-muted m-b-20 font-13 m-h-20"></p>
-
-                    <div class="row">
-                        <div class="col-md-4 col-md-offset-8 btnCnt">
-                            <button type="button"
-                                    class="btn btn-block btn-success btn-custom btn-rounded waves-effect waves-light add_field_button">
-                                <h5><i class="ion-plus"> Добавить таблицу</i></h5>
-                            </button>
-                        </div>
-                    </div>
-                    </div>
-
-                    <div class="col-md-5 col-md-offset-3">
+                    <div class="col-md-5 col-md-offset-4">
                         <button type="button"
                                 class="btn btn-block btn-success waves-effect waves-light">
                             <h5 class="text-white"><i class="fa fa-check"></i>
@@ -150,8 +145,8 @@
                         </button>
                     </div>
                 {% endif %}
+            </div>
         </div>
-    </div>
     </div>
 
     <!-- Modal -->
