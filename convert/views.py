@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from converter.tasks import convert_to_mongo
-
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from forms import RegistrationForm
 
 
 def proceed_convert(request):
@@ -8,8 +10,8 @@ def proceed_convert(request):
         'from': {
             'host': '127.0.0.1',
             'user': 'root',
-            'password': '123456',
-            'db': 'askdb',
+            'password': '',
+            'db': 'galkin',
             'type': 'MY'
         },
         'to': {
@@ -21,20 +23,20 @@ def proceed_convert(request):
         },
         'tables': [
             {
-                'name': 'ask_question',
+                'name': 'questions',
                 'isEmbedded': False
             },
             {
-                'name': 'ask_answer',
+                'name': 'answers',
                 'isEmbedded': True,
-                'embeddedIn': 'ask_question',
-                'selfKey': 'question_id',
+                'embeddedIn': 'questions',
+                'selfKey': 'id_Question',
                 'parentKey': 'id'
             }
         ]
     }
     result = convert_to_mongo.delay(data)
-    return render(request, 'convertation.html', {'task_id': result.task_id})
+    return render(request, 'celery.html', {'task_id': result.task_id})
 
 
 def home(request):
@@ -46,7 +48,23 @@ def signin(request):
 
 
 def signup(request):
-    return render(request, 'signup.html')
+    user = None
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            form.username = request.POST['username']
+            form.email = request.POST['email']
+            form.password1 = request.POST['password1']
+            form.password2 = request.POST['password2']
+            form.save()
+            user = authenticate(username=form.username, password=form.password1)
+            if user is not None:
+                login(request, user)
+                return home(request)
+    else:
+        form = RegistrationForm()
+    return render(request, 'signup.html', {'form': form})
+
 
 
 def account(request):

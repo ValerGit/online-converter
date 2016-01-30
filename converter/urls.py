@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'^graphs/$', views.graphs, name='view-graphs'),
     url(r'^ports/$', views.ports, name='view-choose-ports'),
     url(r'^tables-choose/$', views.tables, name='view-choose-tables'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name='view-logout'),
 ]

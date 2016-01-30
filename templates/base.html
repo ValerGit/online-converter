@@ -11,9 +11,21 @@
 {% block rigistered_user %}
 <nav class="nav-wrapper white">
     <div class="row">
-        <div class="col s4 offset-s1">
+        <div class="col s3 offset-s1">
             <a href="{% url 'view-home' %}" class="brand-logo black-text light italic" >Трансформатор</a>
         </div>
+        {% if user.is_authenticated %}
+            <div class="col s2 offset-s8">
+                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                    <li><a href="{% url "view-account" %}" class="black-text">В личный кабинет</a></li>
+                </ul>
+            </div>
+            <div class="col s1">
+                <ul id="nav-mobile" class="left hide-on-med-and-down">
+                    <li><a href="{% url 'view-logout' %}" class="black-text">Выход</a></li>
+                </ul>
+            </div>
+        {% else %}
             <div class="col s1 offset-s8">
                 <ul id="nav-mobile" class="left hide-on-med-and-down">
                     <li><a href="{% url 'view-sign-in' %}" class="black-text">Вход</a></li>
@@ -24,6 +36,7 @@
                     <li><a href="{% url 'view-sign-up' %}" class="black-text">Регистрация</a></li>
                 </ul>
             </div>
+        {% endif %}
     </div>
 </nav>
 {% endblock %}

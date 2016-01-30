@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block main %}
+    <form method="post" enctype="multipart/form-data" action="{% url 'view-sign-up' %}">
+        {% csrf_token %}
+        {{ form.errors }}
     <div class="spacer"></div>
     <div class="row ">
         <div class="col s6 offset-s2">
@@ -11,7 +14,7 @@
         <div class="row">
             <div class="col s4 offset-s1">
                 <div class="input-field col s12">
-                    <input id="input_text" type="text" length="10">
+                    {{ form.username }}
                     <label for="input_text">Имя пользователя</label>
                 </div>
             </div>
@@ -19,44 +22,37 @@
         <div class="row">
             <div class="col s4 offset-s1 ">
                 <div class="input-field col s12">
-                    <input id="email" type="email" class="validate">
-                    <label for="email">Ваш e-mail</label>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col s4 offset-s1 ">
-                <div class="input-field col s12">
-                    <input id="input_text" type="text" length="15">
-                    <label for="input_text">Название организации</label>
+                    {{ form.email }}
+                    <label for="{{ form.email.id_for_label }}">Ваш e-mail</label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col s4 offset-s1">
                 <div class="input-field col s12">
-                    <input id="password" type="password" class="validate">
-                    <label for="password">Пароль
+                    {{ form.password1 }}
+                    <label for="password1">Пароль</label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col s4 offset-s1">
                 <div class="input-field col s12">
-                    <input id="passcheck" type="password" class="validate">
-                    <label for="passcheck">Подтверждение пароля</label>
+                    {{ form.password2 }}
+                    <label for="password2">Подтверждение пароля</label>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col s4 offset-s2">
                 <div class="input-field col s12">
-                    <button class="btn waves-effect waves-light green darken-1" type="submit" name="action">
-                        <a href="#" class="white-text">Зарегестрироваться
+                    <button class="btn waves-effect waves-light green darken-1" id="submit" type="submit" name="action">
+                        <a class="white-text">Зарегестрироваться
                             <i class="material-icons right">done</i>
                         </a>
                     </button>
                 </div>
             </div>
         </div>
+    </form>
 {% endblock %}
