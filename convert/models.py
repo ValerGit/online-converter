@@ -28,8 +28,9 @@ class Database(models.Model):
 
 
 class ConvertedDatabase(models.Model):
-    database_from = models.ForeignKey('Database')
-    database_to = models.ForeignKey('Database')
+    database_from = models.ForeignKey('Database', related_name='db_from')
+    database_to = models.ForeignKey('Database', related_name='db_to')
+    user = models.ForeignKey(User)
     date = models.DateTimeField(auto_now_add=True)
 
     # OK = 'OK'
