@@ -1,10 +1,12 @@
 {% extends 'base-account.html' %}
-
+{% block additional-css %}
+    <link rel="stylesheet" href="/plugins/morris/morris.css">
+{% endblock %}
 {% block activate-follow %}
     active
 {% endblock %}
 {% block activate-graphs %}
-active
+    active
 {% endblock %}
 
 {% block right-content %}
@@ -13,35 +15,54 @@ active
         <!-- Start content -->
         <div class="content">
             <div class="container">
-                <!-- Page-Title -->
                 <div class="row">
-                    <div class="col-sm-12">
-                        <h4 class="page-title">Графики активности</h4>
-                    </div>
-                    <br>
-                    <div class="col-lg-8">
-                        <div class="card-box">
-                            <h4 class="text-dark header-title m-t-0">Sales Analytics</h4>
+                    <div class="col-lg-6">
+                        <div class="portlet">
 
-                            <div class="text-center">
-                                <ul class="list-inline chart-detail-list">
-                                    <li>
-                                        <h5><i class="fa fa-circle m-r-5" style="color: #5fbeaa;"></i>Desktops</h5>
-                                    </li>
-                                    <li>
-                                        <h5><i class="fa fa-circle m-r-5" style="color: #5d9cec;"></i>Tablets</h5>
-                                    </li>
-                                    <li>
-                                        <h5><i class="fa fa-circle m-r-5" style="color: #dcdcdc;"></i>Mobiles</h5>
-                                    </li>
-                                </ul>
+                            <!-- /primary heading -->
+                            <div class="portlet-heading">
+                                <h3 class="portlet-title text-dark"> Area Chart with Point </h3>
+
+                                <div class="portlet-widgets">
+                                    <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                                    <span class="divider"></span>
+                                    <a data-toggle="collapse" data-parent="#accordion1" href="#portlet2"><i
+                                            class="ion-minus-round"></i></a>
+                                    <span class="divider"></span>
+                                    <a href="#" data-toggle="remove"><i class="ion-close-round"></i></a>
+                                </div>
+                                <div class="clearfix"></div>
                             </div>
-                            <div id="morris-bar-stacked" style="height: 303px;"></div>
+                            <div id="portlet2" class="panel-collapse collapse in">
+                                <div class="portlet-body">
+                                    <div class="text-center">
+                                        <ul class="list-inline chart-detail-list">
+                                            <li>
+                                                <h5><i class="fa fa-circle m-r-5" style="color: #36404a;"></i>Series A
+                                                </h5>
+                                            </li>
+                                            <li>
+                                                <h5><i class="fa fa-circle m-r-5" style="color: #5d9cec;"></i>Series B
+                                                </h5>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div id="morris-area-with-dotted" style="height: 300px;"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <!-- /Portlet -->
                 </div>
+
             </div>
         </div>
     </div>
 
+{% endblock %}
+
+{% block additional-scripts %}
+    <script src="/plugins/morris/morris.min.js"></script>
+    <script src="/plugins/raphael/raphael-min.js"></script>
+    <script src="/pages/morris.init.js"></script>
 {% endblock %}
