@@ -110,11 +110,14 @@ def tables(request):
     need_db_choose = 0
     if not from_db or not to_db:
         need_db_choose = 1
-        all_mysqls = Database.objects.filter(type="MY")
-        all_mongos = Database.objects.filter(type="MO")
-
-    return render(request, 'convertation.html', {'need_db_choose': need_db_choose, 'all_mysql':all_mysqls,
+        all_mysqls = Database.objects.filter(type="MY", user=request.user)
+        all_mongos = Database.objects.filter(type="MO", user=request.user)
+        return render(request, 'convertation.html', {'need_db_choose': need_db_choose, 'all_mysql':all_mysqls,
                                                  'all_mongos':all_mongos})
+
+    return render(request, 'convertation.html', {
+        'need_db_choose': need_db_choose
+    })
 
 
 @login_required

@@ -26,11 +26,10 @@ $(document).ready(function () {
 
 
 $('#set-dbs').click(function () {
-    var from_db = $('#from-db option:selected').text();
-    var to_db = $('#to-db option:selected').text();
-    if ((to_db = '') || (from_db = '')) {
+    var from_db = $('#from-db option:selected').val().trim();
+    var to_db = $('#to-db option:selected').val().trim();
+    if ((to_db == '') || (from_db == '')) {
         swal("Введенные параметры не валидны");
     }
-    swal(from_db);
-    //$.get(window.location.href = "/tables-choose/?from=" + from_db + "&to=" + to_db);
+    window.location.href = "/tables-choose/?from=" + from_db + "&to=" + to_db;
 });
