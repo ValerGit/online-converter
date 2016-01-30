@@ -137,9 +137,9 @@ def create_db(request):
             for el in data['to']:
                 if not el:
                     return JsonResponse({'valid': 'no'})
-            db_from = Database(**data['from'])
+            db_from = Database(user=request.user, **data['from'])
             db_from.save()
-            db_to = Database(**data['to'])
+            db_to = Database(user=request.user, **data['to'])
             db_to.save()
             return JsonResponse({'valid': 'ok', 'from_id': db_from.id, 'to_id': db_to.id})
         else:
