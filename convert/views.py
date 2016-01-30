@@ -13,6 +13,7 @@ from convert.models import ConvertedDatabase, Database
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 import json
+from convert import utils
 
 
 def proceed_convert(request):
@@ -130,13 +131,19 @@ def check_status(request):
 def create_db(request):
     if request.is_ajax():
         if request.method == "POST":
-            data = json.loads(request.body)
-            for el in data['from']:
-                if not el:
-                    return JsonResponse({'valid': 'no'})
-            for el in data['to']:
-                if not el:
-                    return JsonResponse({'valid': 'no'})
+            try:
+                data = json.loads(request.body)
+            except ValueError:
+                return HttpResponseBadRequest()
+            try:
+                for el in data['from']:
+                    if not el:
+                        return JsonResponse({'valid': 'no'})
+                for el in data['to']:
+                    if not el:
+                        return JsonResponse({'valid': 'no'})
+            except KeyError:
+                return HttpResponseBadRequest()
             db_from = Database(user=request.user, **data['from'])
             db_from.save()
             db_to = Database(user=request.user, **data['to'])
@@ -147,3 +154,26 @@ def create_db(request):
     else:
         return HttpResponseBadRequest()
 
+
+@login_required
+def get_tables_by_db(request):
+    if request.is_ajax():
+        if request.method == "GET":
+            db_id = request.GET.get('db_id')
+            if db_id is None:
+                return HttpResponseBadRequest()
+            try:
+                db = Database.objects.get(id=db_id)
+            except Database.DoesNotExist:
+                return JsonResponse({'status': 'bad'})
+            if db.user != request.user:
+                return JsonResponse({'status': 'bad'})
+            conn = utils.check_mysql_connection(db.db_host, db.db_user, db.db_password, db.db_name)
+            if not conn:
+                return JsonResponse({'status': 'bad'})
+            table_names = utils.get_table_names_by_connection(conn)
+            return JsonResponse({'status': 'ok', 'tables': table_names})
+        else:
+            return HttpResponseBadRequest()
+    else:
+        return HttpResponseBadRequest()
