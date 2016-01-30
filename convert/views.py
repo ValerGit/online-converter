@@ -197,3 +197,8 @@ def get_tables_by_db(request):
             return HttpResponseBadRequest()
     else:
         return HttpResponseBadRequest()
+
+
+@login_required
+def get_attrs_by_table(request):
+    pass
