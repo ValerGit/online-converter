@@ -13,10 +13,10 @@ class UserForms(forms.Form):
         try:
             u = User.objects.get(username=cleaned_data.get('username'))
         except User.DoesNotExist:
-            self.add_error('username', "Sorry, wrong username or password!")
+            self.add_error('username', "Wrong input!")
             return
         if any(self.errors):
-            self.add_error('password', "Sorry, wrong username or password!")
+            self.add_error('password', "Wrong input!")
             return
 
 

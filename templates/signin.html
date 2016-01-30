@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block main %}
-    <form method="post" enctype="multipart/form-data" action="{% url 'view-sign-up' %}">
+    <form method="post" enctype="multipart/form-data" action="{% url 'view-sign-in' %}">
         {% csrf_token %}
         {{ form.errors }}
         <div class="spacer"></div>

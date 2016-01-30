@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from forms import RegistrationForm, UserForms
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 
 
 def proceed_convert(request):
@@ -56,8 +57,6 @@ def signin(request):
             if user is not None:
                 login(request, user)
                 return HttpResponseRedirect(request.POST.get('next', ''))
-            else:
-                raise_error = True
     else:
         form = UserForms()
     return render(request, 'signin.html', {'form': form})
