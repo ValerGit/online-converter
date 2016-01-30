@@ -146,3 +146,4 @@ def create_db(request):
             return HttpResponseBadRequest()
     else:
         return HttpResponseBadRequest()
+

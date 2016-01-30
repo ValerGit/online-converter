@@ -1055,7 +1055,7 @@ function renderPagination(wizard, options, state)
     if (options.enablePagination)
     {
         var pagination = "<{0} class=\"actions {1}\"><ul role=\"menu\" aria-label=\"{2}\">{3}</ul></{0}>",
-            buttonTemplate = "<li><a href=\"#{0}\" role=\"menuitem\">{1}</a></li>",
+            buttonTemplate = "<li><a href=\"#{0}\" id=\"{0}\" role=\"menuitem\">{1}</a></li>",
             buttons = "";
 
         if (!options.forceMoveForward)
@@ -2006,7 +2006,7 @@ var defaults = $.fn.steps.defaults = {
          * @default "Finish"
          * @for defaults
          **/
-        finish: "Finish",
+        finish: "Завершить",
 
         /**
          * Label for the next button.
@@ -2016,7 +2016,7 @@ var defaults = $.fn.steps.defaults = {
          * @default "Next"
          * @for defaults
          **/
-        next: "Next",
+        next: "Вперед",
 
         /**
          * Label for the previous button.
@@ -2026,7 +2026,7 @@ var defaults = $.fn.steps.defaults = {
          * @default "Previous"
          * @for defaults
          **/
-        previous: "Previous",
+        previous: "Назад",
 
         /**
          * Label for the loading animation.
