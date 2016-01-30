@@ -2,7 +2,8 @@ from django.shortcuts import render
 from converter.tasks import convert_to_mongo
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
-from forms import RegistrationForm
+from forms import RegistrationForm, UserForms
+from django.http import HttpResponse, HttpResponseRedirect
 
 
 def proceed_convert(request):
@@ -44,7 +45,22 @@ def home(request):
 
 
 def signin(request):
-    return render(request, 'signin.html')
+    user = request.user
+    value = request.REQUEST.get('next', '')
+    if request.method == 'POST':
+        form = UserForms(request.POST)
+        if form.is_valid():
+            form.username = request.POST['username']
+            form.password = request.POST['password']
+            user = authenticate(username=form.username, password=form.password)
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect(request.POST.get('next', ''))
+            else:
+                raise_error = True
+    else:
+        form = UserForms()
+    return render(request, 'signin.html', {'form': form})
 
 
 def signup(request):

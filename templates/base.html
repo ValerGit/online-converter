@@ -28,7 +28,7 @@
         {% else %}
             <div class="col s1 offset-s8">
                 <ul id="nav-mobile" class="left hide-on-med-and-down">
-                    <li><a href="{% url 'view-sign-in' %}" class="black-text">Вход</a></li>
+                    <li><a href="{% url 'view-sign-in' %}?next={{ request.path }}" class="black-text">Вход</a></li>
                 </ul>
             </div>
             <div class="col s1 ">
@@ -59,7 +59,7 @@
             <div class="row">
                 <div class="col s12">
                     <div class="center-align">
-                        <a href="#create" class="btn btn-large green darken-1">Зарегестрироваться
+                        <a href="{% url 'view-sign-in' %}" class="btn btn-large green darken-1">Зарегестрироваться
                             <i class="material-icons right">vpn_key</i>
                         </a>
                         <a href="#learn" class="btn btn-large white grey-text hero-btn">Узнать больше</a>
