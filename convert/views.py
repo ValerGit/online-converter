@@ -116,12 +116,14 @@ def tables(request):
                                                  'all_mongos':all_mongos})
 
     try:
-        from_database = Database.objects.get(id=from_db)
-        to_database = Database.objects.get(id=to_db)
+        from_database = Database.objects.get(id=from_db, user=request.user)
+        to_database = Database.objects.get(id=to_db, user=request.user)
     except Database.DoesNotExist:
         return HttpResponseBadRequest()
     return render(request, 'convertation.html', {
-        'need_db_choose': need_db_choose
+        'need_db_choose': need_db_choose,
+        'from_db': from_db,
+        'to_db': to_db
     })
 
 
