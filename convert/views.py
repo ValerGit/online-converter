@@ -188,7 +188,7 @@ def get_tables_by_db(request):
                 return JsonResponse({'status': 'bad'})
             if db.user != request.user:
                 return JsonResponse({'status': 'bad'})
-            conn = utils.check_mysql_connection(db.db_host, db.db_user, db.db_password, db.db_name)
+            conn = utils.check_mysql_connection(db.db_address, db.db_user, db.db_password, db.db_name)
             if not conn:
                 return JsonResponse({'status': 'bad'})
             table_names = utils.get_table_names_by_connection(conn)
