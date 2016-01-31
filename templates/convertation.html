@@ -129,7 +129,7 @@
                     </div>
                     <div class="col-md-5 col-md-offset-4">
                         <button type="button"
-                                class="btn btn-block btn-success waves-effect waves-light">
+                                class="btn btn-block btn-success waves-effect waves-light js-convert-btn">
                             <h5 class="text-white"><i class="fa fa-check"></i>
                                 Конвертировать </h5>
                         </button>
@@ -178,6 +178,7 @@
                 var x = 1; //initlal text box count
 
                 var source_id = $('#source-id').val();
+                var res_id = $('#result-id').val();
                 $.get("/get-tables/?db_id=" + source_id, function (response) {
                     if(response['status'] == "bad") {
                         alert("Ошибка подключения к БД. Проверьте правильность введенных данных");
@@ -293,6 +294,81 @@
                         });
                     }
                 });
+
+                $(document).on('click', '.js-convert-btn', function(e) {
+                    e.preventDefault();
+                    var rows = $('.input_fields_wrap .row');
+                    var valid = true;
+                    $.each(rows, function(key, val) {
+                        var prim = $(val).find('.js-table option:selected').text();
+                        var emb = $(val).find('.js-for-table option:selected').text();
+                        var disabled = $(val).find('.js-for-table').attr('disabled');
+                        if(prim == emb && disabled != "disabled") {
+                            sweetAlert("Нельзя вкладывать одинаковые таблицы друг в друга");
+                            valid = false;
+                        }
+                    });
+                    if(!valid)
+                        return;
+                    var tables = [];
+                    $.each(rows, function(key, val) {
+                        var table;
+                        if($(val).find('.need-embed').prop('checked')) {
+                            table = {
+                                'name': $(val).find('.js-for-table option:selected').text(),
+                                'isEmbedded': true,
+                                'embeddedIn': $(val).find('.js-table option:selected').text(),
+                                'selfKey': $(val).find('.js-embed option:selected').text(),
+                                'parentKey': $(val).find('.js-prim option:selected').text()
+                            };
+                        } else {
+                            table = {
+                                'name': $(val).find('.js-table option:selected').text(),
+                                'isEmbedded': false
+                            };
+                        }
+                        tables.push(table);
+                    });
+                    $.post('/converting/',
+                            JSON.stringify({'tables': tables, 'from': source_id, 'to': res_id}),
+                            function(data) {
+                                if(data['status'] == 'bad') {
+                                    swal("Произошла внутренняя ошибка. Обратитесь в техническую поддержку");
+                                } else {
+                                    console.log(data['id']);
+                                }
+                            }
+                    );
+                });
+
+                function csrfSafeMethod(method) {
+                    // these HTTP methods do not require CSRF protection
+                    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+                }
+                $.ajaxSetup({
+                    beforeSend: function (xhr, settings) {
+                        var csrftoken = getCookie('csrftoken');
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                        }
+                    }
+                });
+
+                function getCookie(name) {
+                    var cookieValue = null;
+                    if (document.cookie && document.cookie != '') {
+                        var cookies = document.cookie.split(';');
+                        for (var i = 0; i < cookies.length; i++) {
+                            var cookie = jQuery.trim(cookies[i]);
+                            // Does this cookie string begin with the name we want?
+                            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
             });
 
         </script>

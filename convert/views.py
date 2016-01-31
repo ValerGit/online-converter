@@ -18,37 +18,77 @@ from convert.models import Database
 
 
 def proceed_convert(request):
-    data = {
-        'from': {
-            'host': '127.0.0.1',
-            'user': 'root',
-            'password': '',
-            'db': 'galkin',
-            'type': 'MY'
-        },
-        'to': {
-            'host': '127.0.0.1',
-            'user': '',
-            'password': '',
-            'db': 'forums',
-            'type': 'MO'
-        },
-        'tables': [
-            {
-                'name': 'questions',
-                'isEmbedded': False
-            },
-            {
-                'name': 'answers',
-                'isEmbedded': True,
-                'embeddedIn': 'questions',
-                'selfKey': 'id_Question',
-                'parentKey': 'id'
+    if request.is_ajax():
+        if request.method == 'POST':
+            try:
+                data = json.loads(request.body)
+            except ValueError:
+                return HttpResponseBadRequest()
+            try:
+                from_database = Database(id=data['from'], user=request.user)
+                to_database = Database(id=data['to'], user=request.user)
+            except (Database.DoesNotExist, KeyError):
+                return JsonResponse({'status': 'bad'})
+            to_celery = {
+                'from': {
+                    'host': from_database.db_address,
+                    'user': from_database.db_user,
+                    'password': from_database.db_password,
+                    'db': from_database.db_name
+                },
+                'to': {
+                    'host': to_database.db_address,
+                    'user': to_database.db_user,
+                    'password': to_database.db_password,
+                    'db': to_database.db_name
+                },
+                'tables': data['tables']
             }
-        ]
-    }
-    result = convert_to_mongo.delay(data)
-    return render(request, 'celery.html', {'task_id': result.task_id})
+            result = convert_to_mongo.delay(to_celery)
+            conv_db = ConvertedDatabase()
+            conv_db.database_from = from_database
+            conv_db.database_to = to_database
+            conv_db.user = request.user
+            conv_db.celery_id = result.task_id
+            conv_db.save()
+            return JsonResponse({'status': 'ok', 'id': conv_db.id})
+            #  many many checks required !!!
+
+        else:
+            return HttpResponseBadRequest()
+    else:
+        return HttpResponseBadRequest()
+    # data = {
+    #     'from': {
+    #         'host': '127.0.0.1',
+    #         'user': 'root',
+    #         'password': '',
+    #         'db': 'galkin',
+    #         'type': 'MY'
+    #     },
+    #     'to': {
+    #         'host': '127.0.0.1',
+    #         'user': '',
+    #         'password': '',
+    #         'db': 'forums',
+    #         'type': 'MO'
+    #     },
+    #     'tables': [
+    #         {
+    #             'name': 'questions',
+    #             'isEmbedded': False
+    #         },
+    #         {
+    #             'name': 'answers',
+    #             'isEmbedded': True,
+    #             'embeddedIn': 'questions',
+    #             'selfKey': 'id_Question',
+    #             'parentKey': 'id'
+    #         }
+    #     ]
+    # }
+    # result = convert_to_mongo.delay(data)
+    #return render(request, 'celery.html', {'task_id': result.task_id})
 
 
 def home(request):
