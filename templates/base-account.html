@@ -66,11 +66,11 @@
 
 
                     <li class="has_sub">
-                        <a href="#" class="waves-effect"><i class="md md-search"></i> <span> Управление БД </span>
+                        <a href="#" class="waves-effect{% block activate-management %} {% endblock %}"><i class="md md-search"></i> <span> Управление БД </span>
                         </a>
                         <ul class="list-unstyled">
                             <li><a href="#">Создать пользователей</a></li>
-                            <li><a href="#">Удаление БД</a></li>
+                            <li class="{% block activate-removal %} {% endblock %}"><a href="{% url 'view-remove' %}">Удаление БД</a></li>
                         </ul>
                     </li>
 

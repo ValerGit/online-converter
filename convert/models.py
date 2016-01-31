@@ -25,6 +25,7 @@ class Database(models.Model):
     db_user = models.CharField(max_length=255)
     db_address = models.CharField(max_length=255)
     db_password = models.CharField(max_length=255, default='')
+    is_deleted = models.IntegerField(default=0)
 
 
 class ConvertedDatabase(models.Model):

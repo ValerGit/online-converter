@@ -706,8 +706,8 @@ textarea.form-control {
 .pagination > .active > span:hover,
 .pagination > .active > a:focus,
 .pagination > .active > span:focus {
-  background-color: #5fbeaa;
-  border-color: #5fbeaa;
+  background-color: #43a047;
+  border-color: #43a047;
 }
 .pager li > a,
 .pager li > span {
