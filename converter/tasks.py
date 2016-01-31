@@ -53,14 +53,15 @@ def convert_to_mongo(self, data):
 
     for t in data['tables']:
         if not t['isEmbedded']:
-            convert(data['tables'], t, cur, mongo_db)
+            convert(self, data['tables'], t, cur, mongo_db)
 
 
-def convert(tables, current_table, cursor, mongo_db):
+def convert(self, tables, current_table, cursor, mongo_db):
     cursor.execute('SELECT COUNT(*) as cnt FROM ' + current_table['name'])
     quantity = cursor.fetchone()['cnt']
     cursor.fetchall()  # free result
     MAX_CHUNK = 10000
+    num_done = 0
     for i in range(quantity / MAX_CHUNK + 1):
         cursor.execute(
             'SELECT * FROM ' + current_table['name'] + ' LIMIT ' + str(MAX_CHUNK * i) + ', ' + str(MAX_CHUNK)
@@ -69,7 +70,12 @@ def convert(tables, current_table, cursor, mongo_db):
             collection = mongo_db[current_table['name']]
             for row in cursor.fetchall():
                 inserted_id = collection.insert_one(row).inserted_id
-                print inserted_id
+                # print inserted_id
+                num_done += 1
+                self.update_state(state='PROGRESS',
+                                  meta={'current_table': current_table['name'],
+                                        'current': num_done,
+                                        'total': quantity})
         else:
             for row in cursor.fetchall():
                 mongo_db[current_table['embeddedIn']].find_one_and_update(
@@ -78,8 +84,13 @@ def convert(tables, current_table, cursor, mongo_db):
                         '$push': {current_table['name']: row}
                     }
                 )
+                num_done += 1
+                self.update_state(state='PROGRESS',
+                                  meta={'current_table': current_table['name'],
+                                        'current': num_done,
+                                        'total': quantity})
 
     embed = (t for t in tables if t['isEmbedded'] and t['embeddedIn'] == current_table['name'])
 
     for t in embed:
-        convert(tables, t, cursor, mongo_db)
+        convert(self, tables, t, cursor, mongo_db)
