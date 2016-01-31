@@ -26,8 +26,8 @@ def proceed_convert(request):
             except ValueError:
                 return HttpResponseBadRequest()
             try:
-                from_database = Database(id=data['from'], user=request.user)
-                to_database = Database(id=data['to'], user=request.user)
+                from_database = Database.objects.get(id=data['from'], user=request.user)
+                to_database = Database.objects.get(id=data['to'], user=request.user)
             except (Database.DoesNotExist, KeyError):
                 return JsonResponse({'status': 'bad'})
             to_celery = {
@@ -45,6 +45,19 @@ def proceed_convert(request):
                 },
                 'tables': data['tables']
             }
+            #  many many checks required !!!
+            for table in data['tables']:
+                if table['isEmbedded']:
+                    exist = False
+                    for t in data['tables']:
+                        if table['embeddedIn'] == t['name']:
+                            exist = True
+                            break
+                    if not exist:
+                        to_celery['tables'].append({
+                            'name': table['embeddedIn'],
+                            'isEmbedded': False
+                        })
             result = convert_to_mongo.delay(to_celery)
             conv_db = ConvertedDatabase()
             conv_db.database_from = from_database
@@ -53,7 +66,6 @@ def proceed_convert(request):
             conv_db.celery_id = result.task_id
             conv_db.save()
             return JsonResponse({'status': 'ok', 'id': conv_db.id})
-            #  many many checks required !!!
 
         else:
             return HttpResponseBadRequest()
@@ -175,22 +187,27 @@ def tables(request):
 
 @login_required
 def check_status(request):
-    if request.method == 'GET':
-        try:
-            converting_database = ConvertedDatabase.objects.get(id=request.GET.get('id'))
-        except ConvertedDatabase.DoesNotExist:
-            return JsonResponse({'error': 'Конвертация не найдена, обратитесь в службу поддержки'})
-        if converting_database.user != request.user:
-            return JsonResponse({'error': 'Конвертация не найдена, обратитесь в службу поддержки'})
-        result = AsyncResult(converting_database.celery_id)
-        return JsonResponse(
-            {
-                'status': result.status,
-                'ready': result.ready()
-            }
-        )
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                converting_database = ConvertedDatabase.objects.get(id=request.GET.get('id'), user=request.user)
+            except ConvertedDatabase.DoesNotExist:
+                return JsonResponse({'error': 'Конвертация не найдена, обратитесь в службу поддержки'})
+            result = AsyncResult(converting_database.celery_id)
+            current_progress = ''
+            if result.status == 'PROGRESS':
+                current_progress = result.result
+            return JsonResponse(
+                {
+                    'status': result.status,
+                    'ready': result.ready(),
+                    'progress': current_progress
+                }
+            )
+        else:
+            return JsonResponse({'error': 'Неверный запрос'})
     else:
-        return JsonResponse({'error': 'Неверный запрос'})
+        return HttpResponseBadRequest()
 
 
 @login_required
