@@ -44,8 +44,8 @@
                                 <i class="icon-size-fullscreen"></i>
                             </a>
                         </li>
-                        <li><a><i class="ti-user m-r-5"></i> Профиль</a></li>
-                        <li><a><i class="ti-settings m-r-5"></i> Настройки</a></li>
+                        <li><a><i class="ti-user m-r-5"></i> {{ user.username }}</a></li>
+{#                        <li><a><i class="ti-settings m-r-5"></i> Настройки</a></li>#}
                         <li><a href="{% url 'view-logout' %}" ><i class="ti-power-off m-r-5"></i> Выход</a></li>
                     </ul>
                 </div>
@@ -57,10 +57,11 @@
             <div id="sidebar-menu">
                 <ul>
 
-                    <li class="text-muted menu-title">Навигация по сайту</li>
+                    <li class="text-muted menu-title">Ваш профиль</li>
+
                     <li><a href="{% url 'view-account' %}"
                            class="waves-effect {% block activate-home %} {% endblock %}">
-                        <i class="ti-home"></i> Ваши БД</a>
+                        <i class=" ti-ruler"></i> История активности</a>
                     </li>
 
 
@@ -83,6 +84,18 @@
                             <li><a href="#">Активность пользователей</a></li>
                         </ul>
                     </li>
+
+                    <li class="text-muted menu-title">Трансляция БД</li>
+                    <li><a href="{% url 'view-choose-ports' %}"
+                           class="waves-effect {% block activate-translation %} {% endblock %}">
+                        <i class=" ti-export"></i> Создать новую БД</a>
+                    </li>
+                    <li><a href="{% url 'view-choose-tables' %}"
+                           class="waves-effect {% block activate-exist %} {% endblock %}">
+                        <i class="ti-rocket"></i> Транслировать существующую БД</a>
+                    </li>
+
+
                 </ul>
                 <div class="clearfix"></div>
             </div>

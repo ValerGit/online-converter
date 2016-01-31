@@ -30,4 +30,5 @@ urlpatterns = [
     url(r'^logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, name='view-logout'),
     url(r'^connect/$', views.create_db),
     url(r'^get-tables/$', views.get_tables_by_db, name='get-tables'),
+    url(r'^get-pulse-data/$', views.get_pulse),
 ]
