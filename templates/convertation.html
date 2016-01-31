@@ -90,16 +90,14 @@
                             <div class="input_fields_wrap">
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <select id="drop-down" class="form-control select2" name="p_scnt">
-                                            <option></option>
+                                        <select class="form-control select2 js-table" name="p_scnt">
                                         </select>
                                     </div>
                                     <div class="col-md-1 switchery-demo">
                                         <input id="need-embed" type="checkbox" data-plugin="switchery" data-color="#f05050"/>
                                     </div>
                                     <div class="col-md-3">
-                                        <select id="drop-down-2" class="form-control select2">
-                                            <option></option>
+                                        <select class="form-control select2 js-for-table">
                                         </select>
                                     </div>
                                     <div class="col-md-2 ">
@@ -170,30 +168,38 @@
     <!-- My-script -->
     {% if not need_db_choose %}
         <script>
-            $('#need-embed').click(function(){
-                var is_checked = $('#need-embed').prop("checked");
-                alert(is_checked);
+            $(document).ready(function () {
+                var allTables;
+                var remaining;
+
                 var source_id = $('#source-id').val();
-                var answ = $.get("/get-tables/?db_id=" + source_id, function (response) {
-                    answ = response;
-                    var mySelect = $("#drop-down-2");
-                    $.each(answ['tables'], function (key,val) {
+                $.get("/get-tables/?db_id=" + source_id, function (response) {
+                    if(response['status'] == "bad") {
+                        alert("Ошибка подключения к БД. Проверьте правильность введенных данных");
+                        window.location.href = "{% url 'view-choose-ports' %}";
+                    }
+                    allTables = response['tables'];
+                    remaining = response['tables'];
+                    var mySelect = $(".js-table");
+                    $.each(allTables, function (key,val) {
                         mySelect.append(
                                 $('<option></option>').attr("value",key).text(val)
                         );
                     });
                 });
-            })
 
-            $(document).ready(function () {
-                var source_id = $('#source-id').val();
-                var answ = $.get("/get-tables/?db_id=" + source_id, function (response) {
-                    answ = response;
-                    var mySelect = $("#drop-down");
-                    $.each(answ['tables'], function (key,val) {
-                        mySelect.append(
-                                $('<option></option>').attr("value",key).text(val)
-                        );
+                $('#need-embed').click(function(){
+                    var is_checked = $('#need-embed').prop("checked");
+                    alert(is_checked);
+                    var source_id = $('#source-id').val();
+                    var answ = $.get("/get-tables/?db_id=" + source_id, function (response) {
+                        answ = response;
+                        var mySelect = $("#js-for-table");
+                        $.each(answ['tables'], function (key,val) {
+                            mySelect.append(
+                                    $('<option></option>').attr("value",key).text(val)
+                            );
+                        });
                     });
                 });
             });
