@@ -335,7 +335,7 @@
                                 if(data['status'] == 'bad') {
                                     swal("Произошла внутренняя ошибка. Обратитесь в техническую поддержку");
                                 } else {
-                                    console.log(data['id']);
+                                    window.location.href = "{% url 'progress' %}?id=" + data['id'];
                                 }
                             }
                     );

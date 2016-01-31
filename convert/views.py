@@ -260,3 +260,8 @@ def get_attrs_by_table(request):
             return HttpResponseBadRequest()
     else:
         return HttpResponseBadRequest()
+
+
+@login_required
+def progress(request):
+    return render(request, 'progress.html')
