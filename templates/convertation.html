@@ -5,6 +5,8 @@
     <link href="/plugins/switchery/dist/switchery.min.css" rel="stylesheet"/>
 {% endblock %}
 
+{% block activate-exist %} active {% endblock %}
+
 {% block right-content %}
     <input id="source-id" type="hidden" value="{{ from_db }}">
     <input id="result-id" type="hidden" value="{{ to_db }}">

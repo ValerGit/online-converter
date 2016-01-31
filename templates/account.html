@@ -1,36 +1,134 @@
 {% extends 'base-account.html' %}
 
+{% block additional-css %}
+    <link rel="stylesheet" href="/plugins/morris/morris.css">
+{% endblock %}
+
 {% block activate-home %}
-active
+    active
 {% endblock %}
 
 {% block right-content %}
     <div class="content-page">
         <div class="content">
             <div class="container">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="panel panel-default text-center slider-bg m-b-0"
-                             style="background: url(/images/galaxy.jpg)">
-                            <div class="panel-body p-0">
-                                <div class="">
-                                    <div id="owl-slider" class="owl-carousel">
-                                        <div class="item">
-                                            <h3><a class="text-white font-600">Добро пожаловать!</a></h3>
+                {% if need_new_db %}
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="panel panel-default text-center slider-bg m-b-0"
+                                 style="background: url(/images/galaxy.jpg)">
+                                <div class="panel-body p-0">
+                                    <div class="">
+                                        <div id="owl-slider" class="owl-carousel">
+                                            <div class="item">
+                                                <h3><a class="text-white font-600">Добро пожаловать!</a></h3>
 
-                                            <p class="m-t-30 text-white"><em>Вы не переносили еще ни одну БД - пора
-                                                начинать!</em></p>
-                                            <button class="btn btn-inverse btn-sm m-t-40">
-                                                <a class="text-white" href="{% url 'view-choose-ports' %}">Начать</a>
-                                            </button>
+                                                <p class="m-t-30 text-white"><em>Вы не переносили еще ни одну БД - пора
+                                                    начинать!</em></p>
+                                                <button class="btn btn-inverse btn-sm m-t-40">
+                                                    <a class="text-white"
+                                                       href="{% url 'view-choose-ports' %}">Начать</a>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                {% else %}
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="card-box">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <h4 class="m-t-0 header-title"><b> История вашей активности</b></h4>
+
+                                        <div class="p-20">
+                                            <div class="table-responsive">
+                                                <table class="table m-0">
+                                                    <thead>
+                                                    <tr>
+                                                        <th> Источник</th>
+                                                        <th> Целевая БД</th>
+                                                        <th> Пользователь</th>
+                                                        <th> Время конвертации</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for a in all_converted %}
+                                                        <tr>
+                                                            <td>{{ a.database_from.db_name }}</td>
+                                                            <td>{{ a.database_to.db_name }}</td>
+                                                            <td>{{ a.user }}</td>
+                                                            <td>{{ a.date }}</td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="portlet">
+
+                                <!-- /primary heading -->
+                                <div class="portlet-heading">
+                                    <h3 class="portlet-title text-dark"> График активности </h3>
+
+                                    <div class="portlet-widgets">
+                                        <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                                        <span class="divider"></span>
+                                        <a data-toggle="collapse" data-parent="#accordion1" href="#portlet2"><i
+                                                class="ion-minus-round"></i></a>
+                                        <span class="divider"></span>
+                                        <a href="#" data-toggle="remove"><i class="ion-close-round"></i></a>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div id="portlet2" class="panel-collapse collapse in">
+                                    <div class="portlet-body">
+                                        <div id="morris-area-with-dotted" style="height: 300px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Portlet -->
+                    </div>
+                {% endif %}
+
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block additional-scripts %}
+    <script src="/plugins/morris/morris.min.js"></script>
+    <script src="/plugins/raphael/raphael-min.js"></script>
+    <script src="/pages/morris.init.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.get("/get-pulse-data/", function (response) {
+                var info = response['data'];
+                new Morris.Area({
+                    // ID of the element in which to draw the chart.
+                    element: 'morris-area-with-dotted',
+                    // Chart data records -- each entry in this array corresponds to a point on
+                    // the chart.
+                    data: info,
+                    xkey: 'date',
+                    ykeys: ['y'],
+                    labels: ['source', 'dest', 'date']
+                });
+            });
+
+        });
+    </script>
 {% endblock %}
