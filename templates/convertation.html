@@ -78,10 +78,10 @@
                                     <p class="font-13 "> Вложенная таблица </p>
                                 </div>
                                 <div class="col-md-2 ">
-                                    <p class="font-13"> Вторичный ключ на волженную таблицу </p>
+                                    <p class="font-13"> Ключ основной таблицы </p>
                                 </div>
                                 <div class="col-md-2">
-                                    <p class="font-13"> Поле по которому таблица вложена </p>
+                                    <p class="font-13"> Вторичный ключ, по которому таблица вложена </p>
                                 </div>
                             </div>
 
@@ -94,7 +94,7 @@
                                         </select>
                                     </div>
                                     <div class="col-md-1 switchery-demo">
-                                        <input class="need-embed" type="checkbox" data-loaded="false" data-plugin="switchery" data-color="#f05050"/>
+                                        <input class="need-embed" type="checkbox" data-plugin="switchery" data-color="#f05050"/>
                                     </div>
                                     <div class="col-md-3">
                                         <select class="form-control select2 js-for-table" disabled>
@@ -228,6 +228,34 @@
                         jsForTable.attr('disabled', 'disabled');
                         jsPrim.attr('disabled', 'disabled');
                         jsEmbed.attr('disabled', 'disabled');
+                    }
+                });
+
+                $('.js-table').change(function(){
+                    var is_checked = $(this).parent().parent().find('.need-embed').prop("checked");
+                    var jsPrim = $(this).parent().parent().find('.js-prim');
+                    if(is_checked) {
+                        var entityPrim = $(this).find('option:selected').text();
+                        jsPrim.empty();
+                        $.each(allAttrs[entityPrim], function(key,val) {
+                            jsPrim.append(
+                                    $('<option></option>').attr("value",key).text(val)
+                            );
+                        });
+                    }
+                });
+
+                $('.js-for-table').change(function(){
+                    var is_checked = $(this).parent().parent().find('.need-embed').prop("checked");
+                    var jsEmbed = $(this).parent().parent().find('.js-embed');
+                    if(is_checked) {
+                        var entityEmbed = $(this).find('option:selected').text();
+                        jsEmbed.empty();
+                        $.each(allAttrs[entityEmbed], function(key,val) {
+                            jsEmbed.append(
+                                    $('<option></option>').attr("value",key).text(val)
+                            );
+                        });
                     }
                 });
             });
