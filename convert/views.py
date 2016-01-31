@@ -14,7 +14,7 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 import json
 from convert import utils
-from convert.models import Database
+from convert.models import Database, ConvertedDatabase
 
 
 def proceed_convert(request):
@@ -106,7 +106,7 @@ def signin(request):
             user = authenticate(username=form.username, password=form.password)
             if user is not None:
                 login(request, user)
-                return HttpResponseRedirect(request.POST.get('next', ''))
+                return HttpResponseRedirect('/account/')
     else:
         form = UserForms()
     return render(request, 'signin.html', {'form': form})
@@ -131,9 +131,14 @@ def signup(request):
     return render(request, 'signup.html', {'form': form})
 
 
-
+@login_required
 def account(request):
-    return render(request, 'account.html')
+    all_converted = ConvertedDatabase.objects.filter(user=request.user).order_by('-date')
+    need_new_db = 0
+    if not all_converted:
+        need_new_db = 1
+    return render(request, 'account.html', {'need_new_db': need_new_db, 'all_converted': all_converted,
+                                            })
 
 
 def graphs(request):
@@ -152,8 +157,8 @@ def tables(request):
         need_db_choose = 1
         all_mysqls = Database.objects.filter(type="MY", user=request.user)
         all_mongos = Database.objects.filter(type="MO", user=request.user)
-        return render(request, 'convertation.html', {'need_db_choose': need_db_choose, 'all_mysql':all_mysqls,
-                                                 'all_mongos':all_mongos})
+        return render(request, 'convertation.html', {'need_db_choose': need_db_choose, 'all_mysql': all_mysqls,
+                                                     'all_mongos': all_mongos})
 
     try:
         from_database = Database.objects.get(id=from_db, user=request.user)
@@ -265,3 +270,22 @@ def get_attrs_by_table(request):
 @login_required
 def progress(request):
     return render(request, 'progress.html')
+
+
+@login_required
+def get_pulse(request):
+    all_converted = ConvertedDatabase.objects.filter(user=request.user).order_by('-date')
+    data = []
+    x= 0
+    for a in all_converted:
+        temp = {
+            'source': a.database_from.db_name,
+            'dest': a.database_to.db_name,
+            'user': a.user.username,
+            'date': a.date,
+            'y': x,
+        }
+        data.append(temp)
+        x += 1
+
+    return JsonResponse({'data': data})
