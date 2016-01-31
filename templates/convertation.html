@@ -94,18 +94,18 @@
                                         </select>
                                     </div>
                                     <div class="col-md-1 switchery-demo">
-                                        <input class="need-embed" type="checkbox" data-plugin="switchery" data-color="#f05050"/>
+                                        <input class="need-embed" type="checkbox" data-loaded="false" data-plugin="switchery" data-color="#f05050"/>
                                     </div>
                                     <div class="col-md-3">
                                         <select class="form-control select2 js-for-table" disabled>
                                         </select>
                                     </div>
                                     <div class="col-md-2 ">
-                                        <select class="form-control select2" disabled>
+                                        <select class="form-control select2 js-prim" disabled>
                                         </select>
                                     </div>
                                     <div class="col-md-2">
-                                        <select class="form-control select2" disabled>
+                                        <select class="form-control select2 js-embed" disabled>
                                         </select>
                                     </div>
                                     <button type="button"
@@ -169,6 +169,7 @@
             $(document).ready(function () {
                 var allTables;
                 var remaining;
+                var allAttrs = {};
 
                 var source_id = $('#source-id').val();
                 $.get("/get-tables/?db_id=" + source_id, function (response) {
@@ -183,6 +184,13 @@
                         mySelect.append(
                                 $('<option></option>').attr("value",key).text(val)
                         );
+                        $.get("/get-attrs/?db_id=" + source_id + "&table=" + val, function (resp) {
+                            if(resp['status'] == "bad") {
+                                alert("Ошибка подключения к БД. Проверьте правильность введенных данных");
+                                window.location.href = "{% url 'view-choose-ports' %}";
+                            }
+                            allAttrs[val] = resp['attrs'];
+                        });
                     });
                     var embedTablesSelect = $('.js-for-table');
                     $.each(allTables, function (key,val) {
@@ -194,10 +202,32 @@
 
                 $('.need-embed').change(function(){
                     var is_checked = $(this).prop("checked");
+                    var jsTable = $(this).parent().parent().find('.js-table');
+                    var jsForTable = $(this).parent().parent().find('.js-for-table');
+                    var jsPrim = $(this).parent().parent().find('.js-prim');
+                    var jsEmbed = $(this).parent().parent().find('.js-embed');
                     if(is_checked) {
-                        $(this).parent().parent().find('.js-for-table').removeAttr('disabled');
+                        var entityPrim = jsTable.find('option:selected').text();
+                        var entityEmbed = jsForTable.find('option:selected').text();
+                        jsPrim.empty();
+                        jsEmbed.empty();
+                        $.each(allAttrs[entityPrim], function(key,val) {
+                            jsPrim.append(
+                                    $('<option></option>').attr("value",key).text(val)
+                            );
+                        });
+                        $.each(allAttrs[entityEmbed], function(key,val) {
+                            jsEmbed.append(
+                                    $('<option></option>').attr("value",key).text(val)
+                            );
+                        });
+                        jsForTable.removeAttr('disabled');
+                        jsPrim.removeAttr('disabled');
+                        jsEmbed.removeAttr('disabled');
                     } else {
-                        $(this).parent().parent().find('.js-for-table').attr('disabled', 'disabled');
+                        jsForTable.attr('disabled', 'disabled');
+                        jsPrim.attr('disabled', 'disabled');
+                        jsEmbed.attr('disabled', 'disabled');
                     }
                 });
             });

@@ -24,4 +24,7 @@ def get_table_names_by_connection(conn):
 def get_attrs_by_table(conn, table):
     cur = conn.cursor()
     cur.execute("SHOW columns FROM " + table)
-    return cur.fetchall()
+    columns = []
+    for row in cur.fetchall():
+        columns.append(row[0])
+    return columns
