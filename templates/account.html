@@ -117,6 +117,7 @@
         $(document).ready(function () {
             $.get("/get-pulse-data/", function (response) {
                 var info = response['data'];
+{#                alert(info);#}
                 new Morris.Area({
                     // ID of the element in which to draw the chart.
                     element: 'morris-area-with-dotted',
@@ -124,8 +125,8 @@
                     // the chart.
                     data: info,
                     xkey: 'date',
-                    ykeys: ['y'],
-                    labels: ['source', 'dest', 'date']
+                    ykeys: ['num'],
+                    labels: ['num', 'date']
                 });
             });
 

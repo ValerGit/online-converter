@@ -279,16 +279,29 @@ def get_pulse(request):
     all_converted = ConvertedDatabase.objects.filter(user=request.user)
     cntr = ConvertedDatabase.objects.filter(user=request.user, date__range=('2013-01-01', now)).count()
     data = []
-    x= 0
-    for a in all_converted:
+    year = now.year
+    end_year = year
+    month = now.month
+    end = month + 1
+    for x in range(1, 12, 1):
+        start_date = str(year)+'-'+str(month)+'-01'
+        end_date = str(end_year)+'-'+str(end)+'-01'
+        cntr = ConvertedDatabase.objects.filter(user=request.user, date__range=(start_date, end_date)).count()
         temp = {
-            'source': a.database_from.db_name,
-            'dest': a.database_to.db_name,
-            'user': a.user.username,
-            'date': a.date,
-            'y': x,
+            'date': start_date,
+            'num': cntr,
         }
         data.append(temp)
-        x += 1
+        end = month
+        month -= 1
+        if month == 0:
+            month = 12
+            end_year = year
+            year -= 1
+            end = 1
+
+        elif month == 11:
+            end = 12
+            end_year = year
 
     return JsonResponse({'data': data})
