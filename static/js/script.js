@@ -2,12 +2,6 @@ $(document).ready(function () {
 
 });
 
-
-$(document).ready(function () {
-    $('.parallax').parallax();
-});
-
-
 $('#set-dbs').click(function () {
     var from_db = $('#from-db option:selected').val().trim();
     var to_db = $('#to-db option:selected').val().trim();

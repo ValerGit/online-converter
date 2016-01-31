@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 import json
 from convert import utils
 from convert.models import Database, ConvertedDatabase
+import datetime
 
 
 def proceed_convert(request):
@@ -229,7 +230,9 @@ def get_attrs_by_table(request):
 
 @login_required
 def get_pulse(request):
-    all_converted = ConvertedDatabase.objects.filter(user=request.user).order_by('-date')
+    now = datetime.datetime.now()
+    all_converted = ConvertedDatabase.objects.filter(user=request.user)
+    cntr = ConvertedDatabase.objects.filter(user=request.user, date__range=('2013-01-01', now)).count()
     data = []
     x= 0
     for a in all_converted:

@@ -216,7 +216,7 @@
                 var finalJson = {
                     'from': myJson, 'to': moJson
                 };
-                if ((myhost == '') || (myuser == '') || (mydb == '') || (mohost == '') ||  (modb == '') || (mopass == '')) {
+                if ((myhost == '') || (myuser == '') || (mydb == '') ||  (modb == '')) {
                     swal("Вы указали не все параметры");
                 } else {
                     $.post("/connect/", JSON.stringify(finalJson),
