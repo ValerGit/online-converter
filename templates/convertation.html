@@ -171,6 +171,12 @@
                 var remaining;
                 var allAttrs = {};
 
+                var max_fields = 10; //maximum input boxes allowed
+                var wrapper = $(".input_fields_wrap"); //Fields wrapper
+                var add_button = $(".add_field_button"); //Add button ID
+
+                var x = 1; //initlal text box count
+
                 var source_id = $('#source-id').val();
                 $.get("/get-tables/?db_id=" + source_id, function (response) {
                     if(response['status'] == "bad") {
@@ -198,9 +204,38 @@
                                 $('<option></option>').attr("value",key).text(val)
                         );
                     });
+                    max_fields = allTables.length;
                 });
 
-                $('.need-embed').change(function(){
+
+                $(add_button).click(function (e) { //on add input button click
+                    e.preventDefault();
+                    if (x < max_fields) { //max input box allowed
+                        x++; //text box increment
+                        $(wrapper).append('<p class="text-muted m-b-20 font-13 m-h-20"></p><div class="input_fields_wrap"><div class="row"><div class="col-md-3"><select class="form-control select2 js-table" name="p_scnt"></select></div><div class="col-md-1 switchery-demo"><input class="need-embed" type="checkbox" data-plugin="switchery" data-color="#f05050"/></div><div class="col-md-3"><select class="form-control select2 js-for-table" disabled> </select> </div> <div class="col-md-2 "> <select class="form-control select2 js-prim" disabled></select> </div> <div class="col-md-2"> <select class="form-control select2 js-embed" disabled> </select> </div> <button type="button"class="btn btn-danger btn-custom btn-xs btn-rounded waves-effect waves-light remove_field"> <i class="ion-minus"></i> </button> </div> </div>');
+                        var init = new Switchery($(wrapper).find('.need-embed').last()[0], {'color': $($(wrapper).find('.need-embed').last()[0]).attr('data-color')});
+                        var primTablesSelect = $($('.js-table').last()[0]);
+                        $.each(allTables, function (key,val) {
+                            primTablesSelect.append(
+                                    $('<option></option>').attr("value",key).text(val)
+                            );
+                        });
+                        var embedTablesSelect = $($('.js-for-table').last()[0]);
+                        $.each(allTables, function (key,val) {
+                            embedTablesSelect.append(
+                                    $('<option></option>').attr("value",key).text(val)
+                            );
+                        });
+                    }
+                });
+
+                $(wrapper).on("click", ".remove_field", function (e) { //user click on remove text
+                    e.preventDefault();
+                    $(this).parent('div').remove();
+                    x--;
+                });
+
+                $(document).on('change', '.need-embed', function(){
                     var is_checked = $(this).prop("checked");
                     var jsTable = $(this).parent().parent().find('.js-table');
                     var jsForTable = $(this).parent().parent().find('.js-for-table');
@@ -231,7 +266,7 @@
                     }
                 });
 
-                $('.js-table').change(function(){
+                $(document).on('change', '.js-table', function(){
                     var is_checked = $(this).parent().parent().find('.need-embed').prop("checked");
                     var jsPrim = $(this).parent().parent().find('.js-prim');
                     if(is_checked) {
@@ -245,7 +280,7 @@
                     }
                 });
 
-                $('.js-for-table').change(function(){
+                $(document).on('change', '.js-for-table', function(){
                     var is_checked = $(this).parent().parent().find('.need-embed').prop("checked");
                     var jsEmbed = $(this).parent().parent().find('.js-embed');
                     if(is_checked) {
