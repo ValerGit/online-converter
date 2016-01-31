@@ -274,6 +274,21 @@ def progress(request):
 
 
 @login_required
+def remove(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+        except ValueError:
+            return HttpResponseBadRequest()
+        id = int(data['table'])
+        table = Database.objects.filter(pk=id).update(is_deleted=1)
+        return JsonResponse({'status': 'ok'})
+
+    all_dbs = Database.objects.filter(user=request.user, is_deleted=0)
+    return render(request, 'removal.html', {'all_dbs': all_dbs})
+
+
+@login_required
 def get_pulse(request):
     now = datetime.datetime.now()
     all_converted = ConvertedDatabase.objects.filter(user=request.user)
