@@ -33,4 +33,5 @@ urlpatterns = [
     url(r'^get-attrs/$', views.get_attrs_by_table, name='get-attrs'),
     url(r'^progress/$', views.progress, name='progress'),
     url(r'^get-pulse-data/$', views.get_pulse),
+    url(r'^check-status/$', views.check_status, name='check-status')
 ]

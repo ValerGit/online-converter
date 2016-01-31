@@ -163,8 +163,8 @@ def ports(request):
 
 
 def tables(request):
-    from_db = request.REQUEST.get('from')
-    to_db = request.REQUEST.get('to')
+    from_db = int(request.REQUEST.get('from'))
+    to_db = int(request.REQUEST.get('to'))
     need_db_choose = 0
     if not from_db or not to_db:
         need_db_choose = 1
@@ -287,7 +287,17 @@ def get_attrs_by_table(request):
 
 @login_required
 def progress(request):
-    return render(request, 'progress.html')
+    # checks required
+    id = int(request.GET.get('id'))
+    if id is None:
+        return HttpResponseBadRequest()
+    try:
+        conv = ConvertedDatabase.objects.get(id=id, user=request.user)
+    except ConvertedDatabase.DoesNotExist:
+        return HttpResponseRedirect('/account/')
+    return render(request, 'progress.html', {'conv_id': id,
+                                             'from_name': conv.database_from.db_name,
+                                             'to_name': conv.database_to.db_name})
 
 
 @login_required

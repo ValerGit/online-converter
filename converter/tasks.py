@@ -75,7 +75,8 @@ def convert(self, tables, current_table, cursor, mongo_db):
                 self.update_state(state='PROGRESS',
                                   meta={'current_table': current_table['name'],
                                         'current': num_done,
-                                        'total': quantity})
+                                        'total': quantity,
+                                        'tables_num': len(tables)})
         else:
             for row in cursor.fetchall():
                 mongo_db[current_table['embeddedIn']].find_one_and_update(
@@ -88,7 +89,8 @@ def convert(self, tables, current_table, cursor, mongo_db):
                 self.update_state(state='PROGRESS',
                                   meta={'current_table': current_table['name'],
                                         'current': num_done,
-                                        'total': quantity})
+                                        'total': quantity,
+                                        'tables_num': len(tables)})
 
     embed = (t for t in tables if t['isEmbedded'] and t['embeddedIn'] == current_table['name'])
 
