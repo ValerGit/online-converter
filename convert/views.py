@@ -119,7 +119,7 @@ def tables(request):
         from_database = Database.objects.get(id=from_db, user=request.user)
         to_database = Database.objects.get(id=to_db, user=request.user)
     except Database.DoesNotExist:
-        return HttpResponseBadRequest()
+        return HttpResponseRedirect('/tables-choose')
     return render(request, 'convertation.html', {
         'need_db_choose': need_db_choose,
         'from_db': from_db,
@@ -201,4 +201,22 @@ def get_tables_by_db(request):
 
 @login_required
 def get_attrs_by_table(request):
-    pass
+    if request.is_ajax():
+        if request.method == "GET":
+            db_id = request.GET.get('db_id')
+            table_name = request.GET.get('table')
+            if db_id is None or table_name is None:
+                return HttpResponseBadRequest()
+            try:
+                db = Database.objects.get(id=db_id, user=request.user)
+            except Database.DoesNotExist:
+                return JsonResponse({'status': 'bad'})
+            conn = utils.check_mysql_connection(db.db_address, db.db_user, db.db_password, db.db_name)
+            if not conn:
+                return JsonResponse({'status': 'bad'})
+            attrs = utils.get_attrs_by_table(conn, table_name)
+            return JsonResponse({'status': 'ok', 'attrs': attrs})
+        else:
+            return HttpResponseBadRequest()
+    else:
+        return HttpResponseBadRequest()
