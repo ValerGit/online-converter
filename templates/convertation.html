@@ -94,20 +94,18 @@
                                         </select>
                                     </div>
                                     <div class="col-md-1 switchery-demo">
-                                        <input id="need-embed" type="checkbox" data-plugin="switchery" data-color="#f05050"/>
+                                        <input class="need-embed" type="checkbox" data-plugin="switchery" data-color="#f05050"/>
                                     </div>
                                     <div class="col-md-3">
-                                        <select class="form-control select2 js-for-table">
+                                        <select class="form-control select2 js-for-table" disabled>
                                         </select>
                                     </div>
                                     <div class="col-md-2 ">
-                                        <select class="form-control select2">
-                                            <option></option>
+                                        <select class="form-control select2" disabled>
                                         </select>
                                     </div>
                                     <div class="col-md-2">
-                                        <select class="form-control select2">
-                                            <option></option>
+                                        <select class="form-control select2" disabled>
                                         </select>
                                     </div>
                                     <button type="button"
@@ -186,21 +184,21 @@
                                 $('<option></option>').attr("value",key).text(val)
                         );
                     });
+                    var embedTablesSelect = $('.js-for-table');
+                    $.each(allTables, function (key,val) {
+                        embedTablesSelect.append(
+                                $('<option></option>').attr("value",key).text(val)
+                        );
+                    });
                 });
 
-                $('#need-embed').click(function(){
-                    var is_checked = $('#need-embed').prop("checked");
-                    alert(is_checked);
-                    var source_id = $('#source-id').val();
-                    var answ = $.get("/get-tables/?db_id=" + source_id, function (response) {
-                        answ = response;
-                        var mySelect = $("#js-for-table");
-                        $.each(answ['tables'], function (key,val) {
-                            mySelect.append(
-                                    $('<option></option>').attr("value",key).text(val)
-                            );
-                        });
-                    });
+                $('.need-embed').change(function(){
+                    var is_checked = $(this).prop("checked");
+                    if(is_checked) {
+                        $(this).parent().parent().find('.js-for-table').removeAttr('disabled');
+                    } else {
+                        $(this).parent().parent().find('.js-for-table').attr('disabled', 'disabled');
+                    }
                 });
             });
 
