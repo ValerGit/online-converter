@@ -36,4 +36,5 @@ urlpatterns = [
     url(r'^check-status/$', views.check_status, name='check-status'),
     url(r'^get-pulse-data/$', views.get_pulse),
     url(r'^remove/$', views.remove, name='view-remove'),
+    url(r'^create-user/$', views.create_user, name='view-create-user'),
 ]

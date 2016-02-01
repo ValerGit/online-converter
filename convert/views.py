@@ -328,7 +328,7 @@ def get_pulse(request):
     end_year = year
     month = now.month
     end = month + 1
-    for x in range(1, 12, 1):
+    for x in range(0, 12, 1):
         start_date = str(year)+'-'+str(month)+'-01'
         end_date = str(end_year)+'-'+str(end)+'-01'
         cntr = ConvertedDatabase.objects.filter(user=request.user, date__range=(start_date, end_date)).count()
@@ -350,3 +350,8 @@ def get_pulse(request):
             end_year = year
 
     return JsonResponse({'data': data})
+
+
+@login_required
+def create_user(request):
+    return render(request, 'create_mongo_user.html')
