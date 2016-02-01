@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "external/base.html" %}
 {% block main %}
     <form method="post" enctype="multipart/form-data" action="{% url 'view-sign-up' %}">
         {% csrf_token %}

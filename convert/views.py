@@ -105,7 +105,7 @@ def proceed_convert(request):
 
 
 def home(request):
-    return render(request, 'base.html')
+    return render(request, 'external/base.html')
 
 
 def signin(request):
@@ -122,7 +122,7 @@ def signin(request):
                 return HttpResponseRedirect('/account/')
     else:
         form = UserForms()
-    return render(request, 'signin.html', {'form': form})
+    return render(request, 'external/signin.html', {'form': form})
 
 
 def signup(request):
@@ -141,7 +141,7 @@ def signup(request):
                 return home(request)
     else:
         form = RegistrationForm()
-    return render(request, 'signup.html', {'form': form})
+    return render(request, 'external/signup.html', {'form': form})
 
 
 @login_required
@@ -150,16 +150,16 @@ def account(request):
     need_new_db = 0
     if not all_converted:
         need_new_db = 1
-    return render(request, 'account.html', {'need_new_db': need_new_db, 'all_converted': all_converted,
+    return render(request, 'internal/account.html', {'need_new_db': need_new_db, 'all_converted': all_converted,
                                             })
 
 
 def graphs(request):
-    return render(request, 'graphs.html')
+    return render(request, 'internal/graphs.html')
 
 
 def ports(request):
-    return render(request, 'choose_db.html')
+    return render(request, 'internal/choose_db.html')
 
 
 def tables(request):
@@ -170,7 +170,7 @@ def tables(request):
         need_db_choose = 1
         all_mysqls = Database.objects.filter(type="MY", user=request.user, is_deleted=0)
         all_mongos = Database.objects.filter(type="MO", user=request.user, is_deleted=0)
-        return render(request, 'convertation.html', {'need_db_choose': need_db_choose, 'all_mysql': all_mysqls,
+        return render(request, 'internal/convertation.html', {'need_db_choose': need_db_choose, 'all_mysql': all_mysqls,
                                                      'all_mongos': all_mongos})
 
     from_db = int(from_db)
@@ -180,7 +180,7 @@ def tables(request):
         to_database = Database.objects.get(id=to_db, user=request.user)
     except Database.DoesNotExist:
         return HttpResponseRedirect('/tables-choose')
-    return render(request, 'convertation.html', {
+    return render(request, 'internal/convertation.html', {
         'need_db_choose': need_db_choose,
         'from_db': from_db,
         'to_db': to_db
@@ -298,7 +298,7 @@ def progress(request):
         conv = ConvertedDatabase.objects.get(id=id, user=request.user)
     except ConvertedDatabase.DoesNotExist:
         return HttpResponseRedirect('/account/')
-    return render(request, 'progress.html', {'conv_id': id,
+    return render(request, 'internal/progress.html', {'conv_id': id,
                                              'from_name': conv.database_from.db_name,
                                              'to_name': conv.database_to.db_name})
 
@@ -315,7 +315,7 @@ def remove(request):
         return JsonResponse({'status': 'ok'})
 
     all_dbs = Database.objects.filter(user=request.user, is_deleted=0)
-    return render(request, 'removal.html', {'all_dbs': all_dbs})
+    return render(request, 'internal/removal.html', {'all_dbs': all_dbs})
 
 
 @login_required
@@ -354,4 +354,4 @@ def get_pulse(request):
 
 @login_required
 def create_user(request):
-    return render(request, 'create_mongo_user.html')
+    return render(request, 'internal/create_mongo_user.html')
