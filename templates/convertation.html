@@ -96,7 +96,8 @@
                                         </select>
                                     </div>
                                     <div class="col-md-1 switchery-demo">
-                                        <input class="need-embed" type="checkbox" data-plugin="switchery" data-color="#f05050"/>
+                                        <input class="need-embed" type="checkbox" data-plugin="switchery"
+                                               data-color="#f05050"/>
                                     </div>
                                     <div class="col-md-3">
                                         <select class="form-control select2 js-for-table" disabled>
@@ -182,29 +183,33 @@
                 var source_id = $('#source-id').val();
                 var res_id = $('#result-id').val();
                 $.get("/get-tables/?db_id=" + source_id, function (response) {
-                    if(response['status'] == "bad") {
-                        alert("Ошибка подключения к БД. Проверьте правильность введенных данных");
-                        window.location.href = "{% url 'view-choose-ports' %}";
+                    if (response['status'] == "bad") {
+                        swal("Ошибка подключения к БД. Проверьте правильность введенных данных");
+                        $(".confirm").click(function () {
+                            window.location.href = "{% url 'view-choose-ports' %}"
+                        });
                     }
                     allTables = response['tables'];
                     remaining = response['tables'];
                     var mySelect = $(".js-table");
-                    $.each(allTables, function (key,val) {
+                    $.each(allTables, function (key, val) {
                         mySelect.append(
-                                $('<option></option>').attr("value",key).text(val)
+                                $('<option></option>').attr("value", key).text(val)
                         );
                         $.get("/get-attrs/?db_id=" + source_id + "&table=" + val, function (resp) {
-                            if(resp['status'] == "bad") {
-                                alert("Ошибка подключения к БД. Проверьте правильность введенных данных");
-                                window.location.href = "{% url 'view-choose-ports' %}";
+                            if (resp['status'] == "bad") {
+                                swal("Ошибка подключения к БД. Проверьте правильность введенных данных");
+                                $(".confirm").click(function () {
+                                    window.location.href = "{% url 'view-choose-ports' %}"
+                                });
                             }
                             allAttrs[val] = resp['attrs'];
                         });
                     });
                     var embedTablesSelect = $('.js-for-table');
-                    $.each(allTables, function (key,val) {
+                    $.each(allTables, function (key, val) {
                         embedTablesSelect.append(
-                                $('<option></option>').attr("value",key).text(val)
+                                $('<option></option>').attr("value", key).text(val)
                         );
                     });
                     max_fields = allTables.length;
@@ -218,15 +223,15 @@
                         $(wrapper).append('<p class="text-muted m-b-20 font-13 m-h-20"></p><div class="input_fields_wrap"><div class="row"><div class="col-md-3"><select class="form-control select2 js-table" name="p_scnt"></select></div><div class="col-md-1 switchery-demo"><input class="need-embed" type="checkbox" data-plugin="switchery" data-color="#f05050"/></div><div class="col-md-3"><select class="form-control select2 js-for-table" disabled> </select> </div> <div class="col-md-2 "> <select class="form-control select2 js-prim" disabled></select> </div> <div class="col-md-2"> <select class="form-control select2 js-embed" disabled> </select> </div> <button type="button"class="btn btn-danger btn-custom btn-xs btn-rounded waves-effect waves-light remove_field"> <i class="ion-minus"></i> </button> </div> </div>');
                         var init = new Switchery($(wrapper).find('.need-embed').last()[0], {'color': $($(wrapper).find('.need-embed').last()[0]).attr('data-color')});
                         var primTablesSelect = $($('.js-table').last()[0]);
-                        $.each(allTables, function (key,val) {
+                        $.each(allTables, function (key, val) {
                             primTablesSelect.append(
-                                    $('<option></option>').attr("value",key).text(val)
+                                    $('<option></option>').attr("value", key).text(val)
                             );
                         });
                         var embedTablesSelect = $($('.js-for-table').last()[0]);
-                        $.each(allTables, function (key,val) {
+                        $.each(allTables, function (key, val) {
                             embedTablesSelect.append(
-                                    $('<option></option>').attr("value",key).text(val)
+                                    $('<option></option>').attr("value", key).text(val)
                             );
                         });
                     }
@@ -238,25 +243,25 @@
                     x--;
                 });
 
-                $(document).on('change', '.need-embed', function(){
+                $(document).on('change', '.need-embed', function () {
                     var is_checked = $(this).prop("checked");
                     var jsTable = $(this).parent().parent().find('.js-table');
                     var jsForTable = $(this).parent().parent().find('.js-for-table');
                     var jsPrim = $(this).parent().parent().find('.js-prim');
                     var jsEmbed = $(this).parent().parent().find('.js-embed');
-                    if(is_checked) {
+                    if (is_checked) {
                         var entityPrim = jsTable.find('option:selected').text();
                         var entityEmbed = jsForTable.find('option:selected').text();
                         jsPrim.empty();
                         jsEmbed.empty();
-                        $.each(allAttrs[entityPrim], function(key,val) {
+                        $.each(allAttrs[entityPrim], function (key, val) {
                             jsPrim.append(
-                                    $('<option></option>').attr("value",key).text(val)
+                                    $('<option></option>').attr("value", key).text(val)
                             );
                         });
-                        $.each(allAttrs[entityEmbed], function(key,val) {
+                        $.each(allAttrs[entityEmbed], function (key, val) {
                             jsEmbed.append(
-                                    $('<option></option>').attr("value",key).text(val)
+                                    $('<option></option>').attr("value", key).text(val)
                             );
                         });
                         jsForTable.removeAttr('disabled');
@@ -269,53 +274,53 @@
                     }
                 });
 
-                $(document).on('change', '.js-table', function(){
+                $(document).on('change', '.js-table', function () {
                     var is_checked = $(this).parent().parent().find('.need-embed').prop("checked");
                     var jsPrim = $(this).parent().parent().find('.js-prim');
-                    if(is_checked) {
+                    if (is_checked) {
                         var entityPrim = $(this).find('option:selected').text();
                         jsPrim.empty();
-                        $.each(allAttrs[entityPrim], function(key,val) {
+                        $.each(allAttrs[entityPrim], function (key, val) {
                             jsPrim.append(
-                                    $('<option></option>').attr("value",key).text(val)
+                                    $('<option></option>').attr("value", key).text(val)
                             );
                         });
                     }
                 });
 
-                $(document).on('change', '.js-for-table', function(){
+                $(document).on('change', '.js-for-table', function () {
                     var is_checked = $(this).parent().parent().find('.need-embed').prop("checked");
                     var jsEmbed = $(this).parent().parent().find('.js-embed');
-                    if(is_checked) {
+                    if (is_checked) {
                         var entityEmbed = $(this).find('option:selected').text();
                         jsEmbed.empty();
-                        $.each(allAttrs[entityEmbed], function(key,val) {
+                        $.each(allAttrs[entityEmbed], function (key, val) {
                             jsEmbed.append(
-                                    $('<option></option>').attr("value",key).text(val)
+                                    $('<option></option>').attr("value", key).text(val)
                             );
                         });
                     }
                 });
 
-                $(document).on('click', '.js-convert-btn', function(e) {
+                $(document).on('click', '.js-convert-btn', function (e) {
                     e.preventDefault();
                     var rows = $('.input_fields_wrap .row');
                     var valid = true;
-                    $.each(rows, function(key, val) {
+                    $.each(rows, function (key, val) {
                         var prim = $(val).find('.js-table option:selected').text();
                         var emb = $(val).find('.js-for-table option:selected').text();
                         var disabled = $(val).find('.js-for-table').attr('disabled');
-                        if(prim == emb && disabled != "disabled") {
+                        if (prim == emb && disabled != "disabled") {
                             sweetAlert("Нельзя вкладывать одинаковые таблицы друг в друга");
                             valid = false;
                         }
                     });
-                    if(!valid)
+                    if (!valid)
                         return;
                     var tables = [];
-                    $.each(rows, function(key, val) {
+                    $.each(rows, function (key, val) {
                         var table;
-                        if($(val).find('.need-embed').prop('checked')) {
+                        if ($(val).find('.need-embed').prop('checked')) {
                             table = {
                                 'name': $(val).find('.js-for-table option:selected').text(),
                                 'isEmbedded': true,
@@ -333,8 +338,8 @@
                     });
                     $.post('/converting/',
                             JSON.stringify({'tables': tables, 'from': source_id, 'to': res_id}),
-                            function(data) {
-                                if(data['status'] == 'bad') {
+                            function (data) {
+                                if (data['status'] == 'bad') {
                                     swal("Произошла внутренняя ошибка. Обратитесь в техническую поддержку");
                                 } else {
                                     window.location.href = "{% url 'progress' %}?id=" + data['id'];
@@ -347,6 +352,7 @@
                     // these HTTP methods do not require CSRF protection
                     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
                 }
+
                 $.ajaxSetup({
                     beforeSend: function (xhr, settings) {
                         var csrftoken = getCookie('csrftoken');
