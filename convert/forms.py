@@ -47,3 +47,7 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+class AddUserForm(forms.Form):
+    db_name = forms.CharField(label='Db_name', max_length=15)

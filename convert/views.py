@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from forms import RegistrationForm, UserForms, SettingsForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
-from forms import RegistrationForm
+from forms import RegistrationForm, AddUserForm
 from celery.result import AsyncResult
 from convert.models import ConvertedDatabase, Database
 from django.http import JsonResponse, HttpResponseBadRequest
@@ -373,4 +373,5 @@ def get_pulse(request):
 
 @login_required
 def create_user(request):
+    form = AddUserForm()
     return render(request, 'internal/create_mongo_user.html')
