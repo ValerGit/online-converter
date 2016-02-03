@@ -17,11 +17,6 @@ app.conf.update(
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 
-@app.task(bind=True)
-def debug_task(self):
-    print('Request: {0!r}'.format(self.request))
-    return {'dict': 3, 'test': 'yes'}
-
 from celery.utils.log import get_task_logger
 import MySQLdb
 import MySQLdb.cursors
@@ -51,14 +46,18 @@ def convert_to_mongo(self, data):
 
     cur = db.cursor()
 
+    current_num = [0]
+
     for t in data['tables']:
         if not t['isEmbedded']:
-            convert(self, data['tables'], t, cur, mongo_db)
+            convert(self, data['tables'], t, cur, mongo_db, current_num)
+            current_num[0] += 1
 
 
-def convert(self, tables, current_table, cursor, mongo_db):
+def convert(self, tables, current_table, cursor, mongo_db, current_num):
     cursor.execute('SELECT COUNT(*) as cnt FROM ' + current_table['name'])
-    quantity = cursor.fetchone()['cnt']
+    quantity = cursor.fetchone()
+    quantity = quantity['cnt']
     cursor.fetchall()  # free result
     MAX_CHUNK = 10000
     num_done = 0
@@ -76,7 +75,8 @@ def convert(self, tables, current_table, cursor, mongo_db):
                                   meta={'current_table': current_table['name'],
                                         'current': num_done,
                                         'total': quantity,
-                                        'tables_num': len(tables)})
+                                        'tables_num': len(tables),
+                                        'current_num': current_num[0]})
         else:
             for row in cursor.fetchall():
                 mongo_db[current_table['embeddedIn']].find_one_and_update(
@@ -90,9 +90,11 @@ def convert(self, tables, current_table, cursor, mongo_db):
                                   meta={'current_table': current_table['name'],
                                         'current': num_done,
                                         'total': quantity,
-                                        'tables_num': len(tables)})
+                                        'tables_num': len(tables),
+                                        'current_num': current_num[0]})
 
     embed = (t for t in tables if t['isEmbedded'] and t['embeddedIn'] == current_table['name'])
 
     for t in embed:
-        convert(self, tables, t, cursor, mongo_db)
+        current_num[0] += 1
+        convert(self, tables, t, cursor, mongo_db, current_num)
