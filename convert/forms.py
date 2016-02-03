@@ -20,6 +20,20 @@ class UserForms(forms.Form):
             return
 
 
+class SettingsForm(forms.Form):
+    username = forms.CharField(label='Username', max_length=10, required=False)
+    email = forms.CharField(widget=forms.EmailInput(), required=False)
+    pass_new = forms.CharField(widget=forms.PasswordInput(), required=False)
+
+    def clean(self):
+        cleaned_data = super(SettingsForm, self).clean()
+        try:
+            usr = User.objects.get(username=cleaned_data.get('username'))
+        except User.DoesNotExist:
+            return
+        self.add_error('username', 'Wrong username')
+
+
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(max_length=30)
 

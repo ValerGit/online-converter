@@ -1,0 +1,54 @@
+{% extends "external/base.html" %}
+{% load widget_tweaks %}
+
+{% block main %}
+    <form method="post" action="{% url 'view-profile' %}">
+        {% csrf_token %}
+        {{ form.errors }}
+        <div class="spacer"></div>
+        <div class="row ">
+            <div class="col s6 offset-s2">
+                <div class="row">
+                    <h7 class="registration">Настройки вашего профиля</h7>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s4 offset-s1">
+                <div class="input-field col s12">
+                    {% render_field form.username placeholder=user.username value=""%}
+                    <label for="input_text">Имя пользователя</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s4 offset-s1">
+                <div class="input-field col s12">
+                    {% render_field form.email placeholder=user.email value=""%}
+                    <label for="input_text">Email</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s4 offset-s1">
+                <div class="input-field col s12">
+                    {% render_field form.pass_new value=""%}
+                    <label for="password2">Сменить пароль</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s4 offset-s2">
+                <div class="input-field col s12">
+                    <button class="btn waves-effect waves-light green darken-1" id="submit" type="submit" name="action">
+                        <a class="white-text">Изменить данные
+                            <i class="material-icons right">done</i>
+                        </a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

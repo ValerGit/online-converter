@@ -44,7 +44,7 @@
                                 <i class="icon-size-fullscreen"></i>
                             </a>
                         </li>
-                        <li><a><i class="ti-user m-r-5"></i> {{ user.username }}</a></li>
+                        <li><a href="{% url 'view-profile' %}"><i class="ti-user m-r-5"></i> {{ user.username }}</a></li>
 {#                        <li><a><i class="ti-settings m-r-5"></i> Настройки</a></li>#}
                         <li><a href="{% url 'view-logout' %}" ><i class="ti-power-off m-r-5"></i> Выход</a></li>
                     </ul>

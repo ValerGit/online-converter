@@ -19,6 +19,7 @@ from convert import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^profile/', views.profile, name='view-profile'),
     url(r'^converting/$', 'convert.views.proceed_convert', name='converting'),
     url(r'^$', views.home, name='view-home'),
     url(r'^signin/$', views.signin, name='view-sign-in'),
