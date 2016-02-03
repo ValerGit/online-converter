@@ -1410,14 +1410,14 @@ body.fixed-left .side-menu.left {
 }
 #wrapper.enlarged .left.side-menu #sidebar-menu ul > li:hover > a {
   position: relative;
-  width: 260px;
+  width: 330px;
   background: #f4f8fb;
 }
 #wrapper.enlarged .left.side-menu #sidebar-menu ul > li:hover > ul {
   display: block;
   left: 70px;
   position: absolute;
-  width: 190px;
+  width: 260px;
 }
 #wrapper.enlarged .left.side-menu #sidebar-menu ul > li:hover > ul a {
   background: #ffffff;
