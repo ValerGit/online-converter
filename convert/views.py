@@ -9,7 +9,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from forms import RegistrationForm
 from celery.result import AsyncResult
-from convert.models import ConvertedDatabase, Database
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 import json
@@ -71,37 +70,6 @@ def proceed_convert(request):
             return HttpResponseBadRequest()
     else:
         return HttpResponseBadRequest()
-    # data = {
-    #     'from': {
-    #         'host': '127.0.0.1',
-    #         'user': 'root',
-    #         'password': '',
-    #         'db': 'galkin',
-    #         'type': 'MY'
-    #     },
-    #     'to': {
-    #         'host': '127.0.0.1',
-    #         'user': '',
-    #         'password': '',
-    #         'db': 'forums',
-    #         'type': 'MO'
-    #     },
-    #     'tables': [
-    #         {
-    #             'name': 'questions',
-    #             'isEmbedded': False
-    #         },
-    #         {
-    #             'name': 'answers',
-    #             'isEmbedded': True,
-    #             'embeddedIn': 'questions',
-    #             'selfKey': 'id_Question',
-    #             'parentKey': 'id'
-    #         }
-    #     ]
-    # }
-    # result = convert_to_mongo.delay(data)
-    #return render(request, 'celery.html', {'task_id': result.task_id})
 
 
 def home(request):

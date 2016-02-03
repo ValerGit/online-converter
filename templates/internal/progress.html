@@ -40,7 +40,7 @@
                                             <i class="icon-layers text-inverse"></i>
                                         </div>
                                         <div class="text-center">
-                                            <h3 class="text-dark"><b class="counter"> 0/<strong id="js-tbls-num"></strong> таблиц сконвертированы</b>
+                                            <h3 class="text-dark"><b class="counter"> <strong id="js-current-num">0</strong> из <strong id="js-tbls-num"></strong> таблиц сконвертированы</b>
                                             </h3>
 
                                             <p class="text-muted">Конвертируется база данных MySQL <strong>{{ from_name }}</strong>
@@ -68,18 +68,24 @@
 {% block additional-scripts %}
     <script>
         $(document).ready(function() {
+            var isFinished = false;
             function results() {
                 $.get('{% url 'check-status' %}?id=' + $('#conv_id').val(), function(response) {
                     if(response['status'] == 'PROGRESS') {
                         $('#js-tbl').text(response['progress']['current_table']);
                         $('#js-tbls-num').text(response['progress']['tables_num']);
+                        $('#js-current-num').text(response['progress']['current_num']);
                         var percent = response['progress']['current'] / response['progress']['total'] * 100;
                         $('.progress-bar').css('width', percent + '%');
                     } else {
-                        $($('.card-box')[0]).empty();
-                        $('.card-box').text('Статус: ' + response['status']);
+                        if(response['status'] == 'SUCCESS' || response['status'] == 'FAILURE') {
+                            isFinished = true;
+                            $($('.card-box')[0]).empty();
+                            $('.card-box').text('Статус: ' + response['status']);
+                        }
                     }
-                    setTimeout(results, 3000);
+                    if(!isFinished)
+                        setTimeout(results, 3000);
                 });
             }
             results();
