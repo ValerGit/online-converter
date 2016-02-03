@@ -50,10 +50,10 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-4 col-md-offset-4">
-                                    <button type="button" id="js-cancel-conv"
-                                            class="btn btn-danger btn-block btn-custom btn-rounded waves-effect waves-light">
-                                        Отменить конвертацию
-                                    </button>
+{#                                    <button type="button" id="js-cancel-conv"#}
+{#                                            class="btn btn-danger btn-block btn-custom btn-rounded waves-effect waves-light">#}
+{#                                        Отменить конвертацию#}
+{#                                    </button>#}
                                 </div>
                             </div>
                         </div>
@@ -167,15 +167,15 @@
 {% block additional-scripts %}
     <script>
         $(document).ready(function() {
-            $('#js-cancel-conv').click(function() {
-                $.get('{% url 'cancel-converting' %}?id=' + $('#conv_id').val(), function(response){
-                    if(response['status'] == 'ok') {
-                        swal("Конвертация отменена");
-                    } else {
-                        swal("Произошла ошибка при отмене конвертации");
-                    }
-                });
-            });
+{#            $('#js-cancel-conv').click(function() {#}
+{#                $.get('{% url 'cancel-converting' %}?id=' + $('#conv_id').val(), function(response){#}
+{#                    if(response['status'] == 'ok') {#}
+{#                        swal("Конвертация отменена");#}
+{#                    } else {#}
+{#                        swal("Произошла ошибка при отмене конвертации");#}
+{#                    }#}
+{#                });#}
+{#            });#}
 
 
             var isFinished = false;
@@ -210,7 +210,6 @@
                 }
             }
 
-            hideAll();
             showView('WAIT');
 
             function results() {

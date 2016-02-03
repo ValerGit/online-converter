@@ -77,6 +77,14 @@ def convert(self, tables, current_table, cursor, mongo_db, current_num):
                                         'total': quantity,
                                         'tables_num': len(tables),
                                         'current_num': current_num[0]})
+                # celery_inspect = celery.current_app.control.inspect()
+                # revoked = celery_inspect.revoked()
+                # try:
+                #     if self.request.id in revoked[self.request.hostname]:
+                #         self.update_state(state='REVOKED')
+                #         exit()
+                # except KeyError:
+                #     pass
         else:
             for row in cursor.fetchall():
                 mongo_db[current_table['embeddedIn']].find_one_and_update(
@@ -92,6 +100,14 @@ def convert(self, tables, current_table, cursor, mongo_db, current_num):
                                         'total': quantity,
                                         'tables_num': len(tables),
                                         'current_num': current_num[0]})
+                # celery_inspect = celery.current_app.control.inspect()
+                # revoked = celery_inspect.revoked()
+                # try:
+                #     if self.request.id in revoked[self.request.hostname]:
+                #         self.update_state(state='REVOKED')
+                #         exit()
+                # except KeyError:
+                #     pass
 
     embed = (t for t in tables if t['isEmbedded'] and t['embeddedIn'] == current_table['name'])
 

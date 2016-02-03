@@ -17,6 +17,7 @@ from convert.models import Database, ConvertedDatabase
 import datetime
 
 
+@login_required
 def proceed_convert(request):
     if request.is_ajax():
         if request.method == 'POST':
@@ -141,14 +142,18 @@ def account(request):
                                             })
 
 
+@login_required
 def graphs(request):
     return render(request, 'internal/graphs.html')
 
 
+
+@login_required
 def ports(request):
     return render(request, 'internal/choose_db.html')
 
 
+@login_required
 def tables(request):
     from_db = request.REQUEST.get('from')
     to_db = request.REQUEST.get('to')
@@ -301,7 +306,7 @@ def cancel_converting(request):
                 converting = ConvertedDatabase.objects.get(id=id, user=request.user)
             except ConvertedDatabase.DoesNotExist:
                 return JsonResponse({'status': 'bad'})
-            AsyncResult(converting.celery_id).revoke(terminate=True)
+            AsyncResult(converting.celery_id).revoke()
             return JsonResponse({'status': 'ok'})
         else:
             return HttpResponseBadRequest()
