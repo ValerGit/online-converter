@@ -6,3 +6,4 @@ RabbitMQ
 django-celery
 MySQLDb
 PyMongo
+django-widget-tweaks

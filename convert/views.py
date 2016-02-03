@@ -97,7 +97,7 @@ def home(request):
 
 def signin(request):
     user = request.user
-    value = request.REQUEST.get('next', '')
+    value = request.GET.get('next', '')
     if request.method == 'POST':
         form = UserForms(request.POST)
         if form.is_valid():
