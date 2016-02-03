@@ -272,6 +272,25 @@ def progress(request):
 
 
 @login_required
+def cancel_converting(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            id = request.GET.get('id')
+            if id is None:
+                return HttpResponseBadRequest()
+            try:
+                converting = ConvertedDatabase.objects.get(id=id, user=request.user)
+            except ConvertedDatabase.DoesNotExist:
+                return JsonResponse({'status': 'bad'})
+            AsyncResult(converting.celery_id).revoke(terminate=True)
+            return JsonResponse({'status': 'ok'})
+        else:
+            return HttpResponseBadRequest()
+    else:
+        return HttpResponseBadRequest()
+
+
+@login_required
 def remove(request):
     if request.method == 'POST':
         try:

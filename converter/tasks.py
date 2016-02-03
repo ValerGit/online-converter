@@ -57,7 +57,6 @@ def convert_to_mongo(self, data):
 def convert(self, tables, current_table, cursor, mongo_db, current_num):
     cursor.execute('SELECT COUNT(*) as cnt FROM ' + current_table['name'])
     quantity = cursor.fetchone()
-    print quantity
     quantity = quantity['cnt']
     cursor.fetchall()  # free result
     MAX_CHUNK = 10000
