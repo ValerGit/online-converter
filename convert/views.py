@@ -45,7 +45,7 @@ def proceed_convert(request):
                 },
                 'tables': data['tables']
             }
-            #  many many checks required !!!
+
             for table in data['tables']:
                 if table['isEmbedded']:
                     exist = False
@@ -58,6 +58,17 @@ def proceed_convert(request):
                             'name': table['embeddedIn'],
                             'isEmbedded': False
                         })
+
+            # check circular embedding
+            for t in data['tables']:
+                if t['isEmbedded'] and t['name'] == t['embeddedIn']:
+                    return JsonResponse({'status': 'bad', 'message': 'Нельзя вставлять таблицу саму в себя'})
+
+            for table in data['tables']:
+                for t in data['tables']:
+                    if table['isEmbedded'] and table['embeddedIn'] == t['name'] and t['isEmbedded']:
+                        return JsonResponse({'status': 'bad', 'message': 'Нельзя производить конвертацию с вложенностью больше двух'})
+
             result = convert_to_mongo.delay(to_celery)
             conv_db = ConvertedDatabase()
             conv_db.database_from = from_database
