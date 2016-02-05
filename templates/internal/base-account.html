@@ -79,6 +79,9 @@
                             <i class="ion-arrow-graph-up-right"></i>
                             <span> Отслеживать Ваши БД </span> </a>
                         <ul class="list-unstyled">
+                            <li class="{% block activate-manage %} {% endblock %}"><a href="{% url 'view-add-mongo-agent' %}">
+                                Следить за новой БД</a>
+                            </li>
                             <li class="{% block activate-graphs %} {% endblock %}"><a href="{% url 'view-graphs' %}">Графики
                                 активности</a></li>
                             <li><a href="#">Активность пользователей</a></li>

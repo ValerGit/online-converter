@@ -1,0 +1,106 @@
+{% extends 'internal/base-account.html' %}
+
+{% block activate-follow %}
+    active
+{% endblock %}
+{% block activate-manage %}
+    active
+{% endblock %}
+
+{% block right-content %}
+
+    <div class="content-page">
+        <div class="content">
+            <div class="row">
+                <div class="container">
+                    <p class="text-muted m-b-50 font-13 m-h-50"></p>
+
+                    <p class="text-muted m-b-30 font-13 m-h-30"></p>
+
+                    <div class="card-box">
+
+                        <div class="row">
+                            <div class=" col-lg-12">
+                                <div class="text-center ">
+                                    <h3 class="m-b-20"> Скачайте приложение, чтобы следить за вашей MongoDB</h3>
+                                    </span>
+                                </div>
+                                <div class="row">
+                                    {% if download %}
+                                        <div class="col-lg-2 col-lg-offset-3 widget-bg-color-icon">
+                                            <div class="bg-icon bg-icon-success pull-center">
+                                                <i class="text-center md  icon-arrow-down-circle text-success"></i>
+                                            </div>
+                                        </div>
+                                        <p class="text-muted m-b-10 font-13 m-h-20"></p>
+                                        <h3 class="col-lg-4 control-label center-block text-success"><
+                                            Скачать
+                                        </h3>
+
+                                    {% else %}
+                                        <form class="form-horizontal">
+                                            <div class="col-lg-offset-2">
+                                                <div class="form-group clearfix">
+                                                    <label class="col-lg-4  control-label" for="mo-name"> Выберите
+                                                        MongoDB
+                                                    </label>
+
+                                                    <div class="input-field col-lg-5">
+                                                        <select id="mo-name" class="required form-control select2">
+                                                            <option></option>
+                                                            {% for x in all_mongos %}
+                                                                <option value="{{ x.pk }}">
+                                                                    {{ x.db_name }}
+                                                                </option>
+                                                            {% endfor %}
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 text-right">
+                                                <div class="col-md-3 col-md-offset-4">
+                                                    <button type="button" id="choose-db"
+                                                            class="btn btn-block btn-success waves-effect waves-light">
+                                                        <h5 class="text-white"><i class="fa fa-check"></i>
+                                                            Выбрать </h5>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    {% endif %}
+                                </div>
+                                <p class="text-muted m-b-20 font-13 m-h-10"></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block additional-scripts %}
+    <script>
+        $(document).ready(function () {
+            $("#choose-db").click(function () {
+                var selectedDb = $('#mo-name option:selected').val();
+                if (selectedDb != "") {
+                    $.get('/add-mongo-agent/?db_id='+selectedDb, function(data) {
+                        if(data['status'] == 'bad'){
+                            swal("Данной БД не существует!");
+                        }
+                        else {
+                            window.location = '/add-mongo-agent/?db_id='+selectedDb;
+                        }
+                    });
+                } else {
+                    swal("Пожалуйста, выберите БД");
+                }
+            });
+        });
+    </script>
+{% endblock %}

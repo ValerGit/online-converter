@@ -13,8 +13,9 @@ from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 import json
 from convert import utils
-from convert.models import Database, ConvertedDatabase
-import datetime
+from convert.models import Database, ConvertedDatabase, InfluxTokens
+import datetime, hashlib
+from influxdb import InfluxDBClient
 
 
 @login_required
@@ -139,13 +140,38 @@ def account(request):
     if not all_converted:
         need_new_db = 1
     return render(request, 'internal/account.html', {'need_new_db': need_new_db, 'all_converted': all_converted,
-                                            })
+                                                     })
 
 
 @login_required
 def graphs(request):
-    return render(request, 'internal/graphs.html')
+    if request.method == 'POST':
+        db_token = request.POST['token']
+        mongo_inst = InfluxTokens.objects.get(token=db_token)
+        mongo_id = mongo_inst.id
+        mongo_name = mongo_inst.db_name
+        mongo_host = mongo_inst.db_adress
+        mongo_user = mongo_inst.db_user
+        param_name = request.POST['metrics']
+        param_value = request.POST['metr_value']
 
+        # connect to Influx
+        client = InfluxDBClient(mongo_host, 8086, mongo_user, 'root')
+        client.create_database(mongo_id + mongo_name, True)
+        client = InfluxDBClient(database=mongo_id + mongo_name)
+
+        insert_info = [
+            {
+                "measurement": param_name,
+                "time": datetime.datetime.now(),
+                "fields": {
+                    "value": param_value
+                }
+            }
+        ]
+        client.write_points(insert_info)
+
+    return render(request, 'internal/graphs.html')
 
 
 @login_required
@@ -163,7 +189,7 @@ def tables(request):
         all_mysqls = Database.objects.filter(type="MY", user=request.user, is_deleted=0)
         all_mongos = Database.objects.filter(type="MO", user=request.user, is_deleted=0)
         return render(request, 'internal/convertation.html', {'need_db_choose': need_db_choose, 'all_mysql': all_mysqls,
-                                                     'all_mongos': all_mongos})
+                                                              'all_mongos': all_mongos})
 
     from_db = int(from_db)
     to_db = int(to_db)
@@ -291,8 +317,8 @@ def progress(request):
     except ConvertedDatabase.DoesNotExist:
         return HttpResponseRedirect('/account/')
     return render(request, 'internal/progress.html', {'conv_id': id,
-                                             'from_name': conv.database_from.db_name,
-                                             'to_name': conv.database_to.db_name})
+                                                      'from_name': conv.database_from.db_name,
+                                                      'to_name': conv.database_to.db_name})
 
 
 @login_required
@@ -340,8 +366,8 @@ def get_pulse(request):
     month = now.month
     end = month + 1
     for x in range(0, 12, 1):
-        start_date = str(year)+'-'+str(month)+'-01'
-        end_date = str(end_year)+'-'+str(end)+'-01'
+        start_date = str(year) + '-' + str(month) + '-01'
+        end_date = str(end_year) + '-' + str(end) + '-01'
         cntr = ConvertedDatabase.objects.filter(user=request.user, date__range=(start_date, end_date)).count()
         temp = {
             'date': start_date,
@@ -392,3 +418,28 @@ def create_user(request):
 
     all_mongos = Database.objects.filter(type="MO", user=request.user, is_deleted=0)
     return render(request, 'internal/create_mongo_user.html', {'all_mongos': all_mongos})
+
+
+@login_required
+def add_mongo_agent(request):
+    if request.method == 'GET':
+        id = request.GET.get('db_id')
+        do_download = 1
+        if id is None:
+            do_download = 0
+        else:
+            db_info = Database.objects.get(id=id, user=request.user, is_deleted=0, type="MO")
+            if db_info is None:
+                do_download = 0
+                return JsonResponse({'status': 'bad', 'info': 'No db provided'})
+            already_has_token = InfluxTokens.objects.filter(database=id)
+            if not already_has_token:
+                generate_token = InfluxTokens()
+                generate_token.database = db_info
+                str_for_token = db_info.db_user + db_info.db_name + db_info.db_password
+                generate_token.token = hashlib.sha224(str_for_token).hexdigest()
+                generate_token.save()
+                return JsonResponse({'status': 'ok', 'info': 'Brand new token'})
+
+        all_mongos = Database.objects.filter(type="MO", user=request.user, is_deleted=0)
+        return render(request, 'internal/manage.html', {'all_mongos': all_mongos, 'download': do_download})

@@ -62,3 +62,8 @@ class DatabaseTables(models.Model):
     name = models.CharField(max_length=255)
     database = models.ForeignKey('Database')
     rows_quantity = models.IntegerField()
+
+
+class InfluxTokens(models.Model):
+    database = models.ForeignKey('Database')
+    token = models.CharField(max_length=255)
