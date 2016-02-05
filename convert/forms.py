@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from models import Database
 
 
 class UserForms(forms.Form):
@@ -47,7 +48,3 @@ class RegistrationForm(UserCreationForm):
         if commit:
             user.save()
         return user
-
-
-class AddUserForm(forms.Form):
-    db_name = forms.CharField(label='Db_name', max_length=15)

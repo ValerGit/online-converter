@@ -1,4 +1,5 @@
 {% extends 'internal/base-account.html' %}
+{% load widget_tweaks %}
 {% block additional-css %}
     <link href="/plugins/switchery/dist/switchery.min.css" rel="stylesheet"/>
 {% endblock %}
@@ -13,7 +14,7 @@
             <div class="container">
                 <h4 class="m-h-40 header-title"><b>Создание нового пользователя MongoDB</b></h4>
 
-                <form class="card-box">
+                <form action={% url 'view-create-user' %}>
                     <div class="row">
                         <div class="form-group clearfix">
                             <p class="m-h-30 header-title"></p>
@@ -21,53 +22,56 @@
 
                             <div class="col-lg-10">
                                 <div class="form-group clearfix">
-                                    <label class="col-lg-4 control-label" for="my-name"> Выберите MongoDB
+                                    <label class="col-lg-4 control-label" for="mo-name"> Выберите MongoDB
                                     </label>
 
-                                    <div class="col-lg-8">
-                                        <select id="to-db" class="form-control select2">
+                                    <div class="input-field col-lg-8">
+                                        <select id="mo-name" class="form-control select2">
                                             <option></option>
-                                            <option value="">
-                                                valval
-                                            </option>
+                                            {% for x in all_mongos %}
+                                                <option value="{{ x.pk }}">
+                                                    {{ x.db_name }}
+                                                </option>
+                                            {% endfor %}
                                         </select>
+
                                     </div>
                                 </div>
 
                                 <div class="form-group clearfix">
-                                    <label class="control-label col-lg-4 " for="my-name"> Имя пользователя
+                                    <label class="control-label col-lg-4 " for="user-name"> Имя пользователя
                                     </label>
 
                                     <div class="col-lg-8">
-                                        <input id="my-name" name="my-name" type="text"
+                                        <input id="user-name" name="user-name" type="text"
                                                class="required form-control">
 
                                     </div>
                                 </div>
 
                                 <div class="form-group clearfix">
-                                    <label class="col-lg-4 control-label" for="my-password">Пароль
+                                    <label class="col-lg-4 control-label" for="user-password">Пароль
                                     </label>
 
                                     <div class="col-lg-8">
-                                        <input id="my-password" name="my-password" type="password"
+                                        <input id="user-password" name="user-password" type="password"
                                                class="required form-control">
                                     </div>
                                 </div>
                                 <div class="form-group clearfix">
-                                    <label class="col-lg-4 control-label" for="my-password"> Имеет только права на
+                                    <label class="col-lg-4 control-label" for="read-only"> Имеет только права на
                                         чтение
                                     </label>
 
-                                    <div class="col-lg-8  switchery-demo">
-                                        <input class="need-embed" type="checkbox" data-plugin="switchery"
+                                    <div class="col-lg-8 switchery-demo">
+                                        <input id='read-only' class="read-only" type="checkbox" data-plugin="switchery"
                                                data-color="#f05050"/>
                                     </div>
                                 </div>
                                 <div class="form-group clearfix">
                                     <div class="col-md-12 text-right">
                                         <div class="col-md-5 col-md-offset-7">
-                                            <button type="button" id="set-dbs"
+                                            <button type="button" id="create-user"
                                                     class="btn btn-block btn-success waves-effect waves-light">
                                                 <h5 class="text-white"><i class="fa fa-check"></i>
                                                     Создать </h5>
@@ -84,4 +88,64 @@
     </div>
     </div>
     </div>
+{% endblock %}
+
+{% block additional-scripts %}
+    <script>
+        $(document).ready(function () {
+            $('#create-user').click(function () {
+                var selectedDb = $('#mo-name option:selected').val();
+                var newUser = $('#user-name').val();
+                var newPass  = $('#user-password').val();
+                var is_checked = $('#read-only').prop("checked");
+
+                if ((selectedDb != "") && (newUser != "") && (newPass != "")) {
+                    $.post('/create-user/',
+                            JSON.stringify({
+                                'db_key':selectedDb,
+                                'new_user':newUser,
+                                'new_pass':newPass,
+                                'is_read_only':is_checked
+                            }), function(data) {
+                            if(data['status'] == 'ok'){
+                                swal("Пользователь успешно создан");
+                            }else {
+                                swal("Произошла ошибка");
+                            }
+                    });
+                } else {
+                    swal("Все поля обязательны для заполнения");
+                }
+            });
+            function csrfSafeMethod(method) {
+                // these HTTP methods do not require CSRF protection
+                return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+            }
+
+            $.ajaxSetup({
+                beforeSend: function (xhr, settings) {
+                    var csrftoken = getCookie('csrftoken');
+                    if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    }
+                }
+            });
+
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        });
+    </script>
 {% endblock %}

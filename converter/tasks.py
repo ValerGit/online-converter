@@ -96,3 +96,14 @@ def convert(self, tables, current_table, cursor, mongo_db):
 
     for t in embed:
         convert(self, tables, t, cursor, mongo_db)
+
+
+def create_user_mongo(db_data, usr_data):
+    uri = 'mongodb://'
+    if db_data['user'] != '' and db_data['pass'] != '':  # !!!
+        uri += db_data['user'] + ':' + db_data['pass'] + '@'
+    uri += db_data['host'] + '/' + db_data['name']
+
+    client = MongoClient(uri)
+    mongo_db = client[db_data['name']]
+    mongo_db.add_user(usr_data['user_name'], usr_data['pwd'], usr_data['read_only'])
