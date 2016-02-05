@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import render
-from converter.tasks import convert_to_mongo
+from converter.tasks import convert_to_mongo, create_user_mongo
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from forms import RegistrationForm, UserForms, SettingsForm
@@ -365,4 +365,30 @@ def get_pulse(request):
 
 @login_required
 def create_user(request):
-    return render(request, 'internal/create_mongo_user.html')
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+        except ValueError:
+            return HttpResponseBadRequest()
+        info = Database.objects.filter(id=data['db_key'])
+        for_db = {}
+        for db_info in info:
+            for_db = {
+                'host': db_info.db_address,
+                'user': db_info.db_user,
+                'name': db_info.db_name,
+                'pass': db_info.db_password
+            }
+        for_new_user = {
+            'user_name': data['new_user'],
+            'pwd': data['new_pass'],
+            'read_only': data['is_read_only']
+        }
+        try:
+            create_user_mongo(for_db, for_new_user)
+        except Exception:
+            return JsonResponse({'status': 'bad'})
+        return JsonResponse({'status': 'ok'})
+
+    all_mongos = Database.objects.filter(type="MO", user=request.user, is_deleted=0)
+    return render(request, 'internal/create_mongo_user.html', {'all_mongos': all_mongos})
