@@ -7,3 +7,5 @@ django-celery
 MySQLDb
 PyMongo
 django-widget-tweaks
+influxdb
+python-influxdb
