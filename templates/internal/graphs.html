@@ -16,6 +16,11 @@
         <div class="content">
             <div class="container">
                 <div class="row">
+                    <div class="col-lg-12">
+                        <h4 class="m-t-0 header-title"><b> Метрики. База данных: {{ database.db_name }}</b></h4>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-lg-6">
                         <div class="portlet"><!-- /primary heading -->
                             <div class="portlet-heading">
@@ -67,6 +72,92 @@
                     </div>
 
                 </div>
+
+
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="portlet"><!-- /primary heading -->
+                            <div class="portlet-heading">
+                                <h3 class="portlet-title text-dark">
+                                    Page faults
+                                </h3>
+
+                                <div class="portlet-widgets">
+                                    <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                                    <span class="divider"></span>
+                                    <a data-toggle="collapse" data-parent="#accordion1" href="#portlet2"><i
+                                            class="ion-minus-round"></i></a>
+                                    <span class="divider"></span>
+                                    <a href="#" data-toggle="remove"><i class="ion-close-round"></i></a>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div id="portlet2" class="panel-collapse collapse in">
+                                <div class="portlet-body">
+                                    <div id="page_faults" style="height: 320px;" class="flot-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="portlet"><!-- /primary heading -->
+                            <div class="portlet-heading">
+                                <h3 class="portlet-title text-dark">
+                                    Резидентная память
+                                </h3>
+
+                                <div class="portlet-widgets">
+                                    <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                                    <span class="divider"></span>
+                                    <a data-toggle="collapse" data-parent="#accordion1" href="#portlet2"><i
+                                            class="ion-minus-round"></i></a>
+                                    <span class="divider"></span>
+                                    <a href="#" data-toggle="remove"><i class="ion-close-round"></i></a>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div id="portlet2" class="panel-collapse collapse in">
+                                <div class="portlet-body">
+                                    <div id="mem_resident" style="height: 320px;" class="flot-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="portlet"><!-- /primary heading -->
+                            <div class="portlet-heading">
+                                <h3 class="portlet-title text-dark">
+                                    Выделенная память
+                                </h3>
+
+                                <div class="portlet-widgets">
+                                    <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                                    <span class="divider"></span>
+                                    <a data-toggle="collapse" data-parent="#accordion1" href="#portlet2"><i
+                                            class="ion-minus-round"></i></a>
+                                    <span class="divider"></span>
+                                    <a href="#" data-toggle="remove"><i class="ion-close-round"></i></a>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div id="portlet2" class="panel-collapse collapse in">
+                                <div class="portlet-body">
+                                    <div id="mem_mapped" style="height: 320px;" class="flot-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
             </div>
         </div>
     </div>
@@ -158,6 +249,9 @@
 
             plotIt($('#current_connections'), 'current_connections');
             plotIt($('#globalLock'), 'global_lock');
+            plotIt($('#page_faults'), 'page_faults');
+            plotIt($('#mem_resident'), 'mem_resident');
+            plotIt($('#mem_mapped'), 'mem_mapped');
 
         });
     </script>
