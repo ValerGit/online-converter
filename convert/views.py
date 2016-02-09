@@ -465,9 +465,15 @@ def add_mongo_agent(request):
                 generate_token.token = hashlib.sha224(str_for_token).hexdigest()
                 generate_token.save()
                 already_has_token = generate_token.token
+
+            uri = 'mongodb://'
+            if db_info.db_user != '' and db_info.db_password != '':
+                uri += db_info.db_user + ':' + db_info.db_password + '@'
+            uri += db_info.db_address + '/'
+
             return render(request, 'internal/manage.html', {'download': do_download,
                                                             'token': already_has_token, 'db_name': db_info.db_name,
-                                                            'address': db_info.db_address})
+                                                            'address': uri})
 
         all_mongos = Database.objects.filter(type="MO", user=request.user, is_deleted=0)
         return render(request, 'internal/manage.html', {'all_mongos': all_mongos, 'download': do_download})
