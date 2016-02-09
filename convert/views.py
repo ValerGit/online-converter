@@ -194,6 +194,18 @@ def sendmetric(request):
         return JsonResponse({'answ':'ok'})
 
 
+@login_required
+def graphs(request):
+    databases = InfluxTokens.objects.filter(database__user=request.user)
+    return render(request, 'internal/choose-graph.html', {
+        'databases': databases
+    })
+
+
+@login_required
+def get_graph(request):
+    return render(request, 'internal/graphs.html')
+
 
 @login_required
 def ports(request):
