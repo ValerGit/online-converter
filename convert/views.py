@@ -190,9 +190,8 @@ def sendmetric(request):
                 client.write_points(insert_info)
         except KeyError:
             return HttpResponseBadRequest()
-        
-        return JsonResponse({'answ':'ok'})
 
+        return JsonResponse({'answ': 'ok'})
 
 
 @login_required
@@ -458,13 +457,17 @@ def add_mongo_agent(request):
                 do_download = 0
                 return HttpResponseBadRequest()
 
-            already_has_token = InfluxTokens.objects.filter(database=id)
+            already_has_token = InfluxTokens.objects.get(database=id).token
             if not already_has_token:
                 generate_token = InfluxTokens()
                 generate_token.database = db_info
                 str_for_token = db_info.db_user + db_info.db_name + db_info.db_password
                 generate_token.token = hashlib.sha224(str_for_token).hexdigest()
                 generate_token.save()
-                return JsonResponse({'status': 'ok', 'info': 'Brand new token'})
+                already_has_token = generate_token.token
+            return render(request, 'internal/manage.html', {'download': do_download,
+                                                            'token': already_has_token, 'db_name': db_info.db_name,
+                                                            'address': db_info.db_address})
+
         all_mongos = Database.objects.filter(type="MO", user=request.user, is_deleted=0)
         return render(request, 'internal/manage.html', {'all_mongos': all_mongos, 'download': do_download})

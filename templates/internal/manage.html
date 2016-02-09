@@ -13,35 +13,90 @@
         <div class="content">
             <div class="row">
                 <div class="container">
-                    <p class="text-muted m-b-50 font-13 m-h-50"></p>
 
-                    <p class="text-muted m-b-30 font-13 m-h-30"></p>
-
-                    <div class="card-box">
+                    <div class="col-lg-8 col-lg-offset-2 card-box">
 
                         <div class="row">
                             <div class=" col-lg-12">
-                                <div class="text-center ">
-                                    <h3 class="m-b-20"> Скачайте приложение, чтобы следить за вашей MongoDB</h3>
-                                    </span>
-                                </div>
                                 <div class="row">
                                     {% if download %}
-                                        <div class="col-lg-2 col-lg-offset-3 widget-bg-color-icon">
-                                            <div class="bg-icon bg-icon-success pull-center">
-                                                <i class="text-center md  icon-arrow-down-circle text-success"></i>
+                                        <div class="col-lg-12">
+                                            <div class="text-center">
+                                                <h3 class="m-b-20"> Сохраните необходимый проект</h3>
+                                            </div>
+                                            <div class="text-center">
+                                                <code>git clone https://github.com/ValerGit/mongoAgent.git</code>
                                             </div>
                                         </div>
-                                        <p class="text-muted m-b-10 font-13 m-h-20"></p>
-                                        <h3 class="col-lg-4 control-label center-block text-success"><
-                                            Скачать
-                                        </h3>
 
+
+                                        </div>
+                                        </div>
+                                        </div>
+                                        </div>
+                                        <div class="col-lg-12 card-box">
+                                            <div class="row">
+                                                <div class="col-lg-offset-1">
+                                                    <div class="text-center">
+                                                        <h3 class="m-b-20">Порядок действий после скачивания</h3>
+                                                    </div>
+                                                    <h4>1. Установите <a
+                                                            href="https://api.mongodb.org/python/current/installation.html">pyMongo</a>
+                                                    </h4>
+
+                                                    <h4>2. Установите <a
+                                                            href="http://docs.python-requests.org/en/master/user/install/">
+                                                        python-requests </a></h4>
+                                                    <h4>3. Измените файл config.py так, чтобы он выглядел следующим
+                                                        образом</h4>
+
+                                                    <div class="col-lg-offset-2">
+                                                        <p>
+                                                            conf = {
+
+                                                        <p># access token
+
+                                                        <p>
+                                                            <mark>'token': '{{ token }}',</mark>
+
+                                                        <p># mongodb access url
+
+                                                        <p>
+                                                            <mark>'url': 'mongodb://{{ address }}',</mark>
+
+                                                        <p># mongodb db name
+
+                                                        <p>
+                                                            <mark>'db': '{{ db_name }}',</mark>
+
+                                                        <p># metrics interval in seconds
+
+                                                        <p>'interval': 5,
+
+                                                        <p># metric host url
+
+                                                        <p>'metric_url': 'http://localhost/send-metric/',
+
+                                                            }
+                                                        </p>
+                                                    </div>
+                                                    <h4>4. Запустите agent.py </h4>
+
+                                                    <div class="col-lg-offset-2">
+                                                        <code>nohup python agent.py & > nohup.out</code>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
                                     {% else %}
+                                        <div class="text-center ">
+                                            <h3 class="m-b-20"> Выберите инстересующую MongoDB</h3>
+                                        </div>
                                         <form class="form-horizontal">
                                             <div class="col-lg-offset-2">
                                                 <div class="form-group clearfix">
-                                                    <label class="col-lg-4  control-label" for="mo-name"> Выберите
+                                                    <label class="col-lg-4  control-label" for="mo-name">
                                                         MongoDB
                                                     </label>
 
@@ -69,16 +124,15 @@
                                             </div>
 
                                         </form>
+                                        </div>
+                                        <p class="text-muted m-b-20 font-13 m-h-10"></p>
+                                        </div>
+                                        </div>
+                                        </div>
                                     {% endif %}
-                                </div>
-                                <p class="text-muted m-b-20 font-13 m-h-10"></p>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
+    </div>
+    </div>
+    </div>
     </div>
 
 {% endblock %}
@@ -89,12 +143,12 @@
             $("#choose-db").click(function () {
                 var selectedDb = $('#mo-name option:selected').val();
                 if (selectedDb != "") {
-                    $.get('/add-mongo-agent/?db_id='+selectedDb, function(data) {
-                        if(data['status'] == 'bad'){
+                    $.get('/add-mongo-agent/?db_id=' + selectedDb, function (data) {
+                        if (data['status'] == 'bad') {
                             swal("Данной БД не существует!");
                         }
                         else {
-                            window.location = '/add-mongo-agent/?db_id='+selectedDb;
+                            window.location = '/add-mongo-agent/?db_id=' + selectedDb;
                         }
                     });
                 } else {
