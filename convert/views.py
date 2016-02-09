@@ -190,7 +190,7 @@ def sendmetric(request):
                         "time": datetime.datetime.now(),
                         "fields": {
                             "metric": metric['name'],
-                            "database": str(mongo_id),
+                            "database": mongo_id,
                             "value": metric['value']
                         }
                     }
@@ -223,6 +223,43 @@ def get_graph(request):
     else:
         return HttpResponseRedirect('/view-graphs/')
     return render(request, 'internal/graphs.html', {'database': db})
+
+
+@login_required
+def get_metric(request):
+    if request.is_ajax():
+        if request.method == 'GET':
+            try:
+                db_id = int(request.GET.get('db'))
+                time_from = int(request.GET.get('from'))
+                time_to = int(request.GET.get('to'))
+                metric = request.GET.get('metric')
+            except ValueError:
+                return HttpResponseBadRequest()
+            if db_id is None or time_from is None or time_to is None or metric is None:
+                return HttpResponseBadRequest()
+
+            try:
+                Database.objects.get(id=db_id, user=request.user)
+            except Database.DoesNotExist:
+                return JsonResponse({'status': 'bad'})
+
+            # connect to Influx
+            client = InfluxDBClient(
+                settings.INFLUX_HOST,
+                settings.INFLUX_PORT,
+                settings.INFLUX_USER,
+                settings.INFLUX_PASS,
+                settings.INFLUX_DB
+            )
+
+            result = client.query("select * from metrics where metric='%s' and time > %d and time < %d and \"database\" = %d"
+                                  % (metric, time_from, time_to, db_id))
+            return JsonResponse(list(result.get_points(measurement='metrics')), safe=False)
+        else:
+            return HttpResponseBadRequest()
+    else:
+        return HttpResponseBadRequest()
 
 
 @login_required

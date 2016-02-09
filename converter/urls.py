@@ -41,5 +41,6 @@ urlpatterns = [
     url(r'^add-mongo-agent/$', views.add_mongo_agent, name='view-add-mongo-agent'),
     url(r'^view-graphs', views.graphs, name='view-graphs'),
     url(r'^graph', views.get_graph, name='view-get-graph'),
+    url(r'^get-metric', views.get_metric, name='view-get-metric'),
     #url(r'^cancel-converting/$', views.cancel_converting, name='cancel-converting'),
 ]

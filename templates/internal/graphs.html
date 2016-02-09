@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% block right-content %}
+    <input type="hidden" id="db_id" value="{{ database.id }}">
 
     <div class="content-page">
         <div class="content">
@@ -75,17 +76,17 @@
 {% block additional-scripts %}
     <script src="/plugins/morris/morris.min.js"></script>
     <script src="/plugins/raphael/raphael-min.js"></script>
-    <script src="/pages/morris.init.js"></script>
     <script src="/plugins/flot-chart/jquery.flot.js"></script>
     <script src="/pages/jquery.flot.init.js"></script>
     <script src="/plugins/flot-chart/jquery.flot.time.js"></script>
     <script>
         $(document).ready(function() {
-            var data = [ [[1354586000000, 0], [1354586300000, 1]] ];
+            var db_id = $('#db_id').val();
             var borderColor = '#f5f5f5';
 		    var bgColor = '#fff';
 
             function plotIt(selector, metric) {
+                var data = [];
                 var plot = $.plot(selector, data, {
                     series: {
                         shadowSize: 0,
@@ -128,20 +129,35 @@
                     }
                 });
 
+                var previous = Date.now();
+
                 function updatePlot() {
-                    plot.setData([ [[1354586000000, 0], [1354586300000, 1]] ]);
-                    var axes = plot.getAxes();
-                    axes.xaxis.options.max = Date.now();
-                    axes.xaxis.options.min = Date.now() - 60000;
-                    plot.setupGrid();
-                    plot.draw();
-                    setTimeout(updatePlot, $('html').hasClass('mobile-device') ? 1000 : 1000);
+                    var prev = previous;
+                    previous = Date.now();
+                    $.get('{% url 'view-get-metric' %}/?db=' + db_id
+                                                        + '&from=' + (prev * 1000000).toString()
+                                                        + '&to=' + Date.now() * 1000000
+                                                        + '&metric=' + metric,
+                    function(response) {
+                        for(var m in response) {
+                            if(response.hasOwnProperty(m)) {
+                                data.push([Date.parse(response[m]['time']), response[m]['value']]);
+                            }
+                        }
+                        plot.setData([data]);
+                        var axes = plot.getAxes();
+                        axes.xaxis.options.max = Date.now();
+                        axes.xaxis.options.min = Date.now() - 60000;
+                        plot.setupGrid();
+                        plot.draw();
+                        setTimeout(updatePlot, $('html').hasClass('mobile-device') ? 3000 : 3000);
+                    });
                 }
                 updatePlot();
             }
 
             plotIt($('#current_connections'), 'current_connections');
-            plotIt($('#globalLock'), 'globalLock');
+            plotIt($('#globalLock'), 'global_lock');
 
         });
     </script>
