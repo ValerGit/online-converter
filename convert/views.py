@@ -16,6 +16,7 @@ from convert import utils
 from convert.models import Database, ConvertedDatabase, InfluxTokens
 import datetime, hashlib
 from influxdb import InfluxDBClient
+from django.views.decorators.csrf import csrf_exempt
 
 
 @login_required
@@ -155,7 +156,7 @@ def account(request):
                                                      })
 
 
-@login_required
+@csrf_exempt
 def sendmetric(request):
     if request.method == 'POST':
         try:
@@ -165,13 +166,13 @@ def sendmetric(request):
         try:
             db_token = data['token']
             mongo_inst = InfluxTokens.objects.get(token=db_token)
-            mongo_id = mongo_inst.database
+            mongo_id = mongo_inst.database.id
             all_metrics = data['metrics']
         except KeyError:
             return HttpResponseBadRequest()
 
         # connect to Influx
-        client = InfluxDBClient('127.0.0.1', 8086, 'root', '', 'metrics')
+        client = InfluxDBClient('127.0.0.1', 8086, '', '', 'metrics')
 
         try:
             for metric in all_metrics:
@@ -180,8 +181,8 @@ def sendmetric(request):
                         "measurement": "metrics",
                         "time": datetime.datetime.now(),
                         "fields": {
-                            "metric": float(metric['name']),
-                            "database": mongo_id,
+                            "metric": metric['name'],
+                            "database": str(mongo_id),
                             "value": metric['value']
                         }
                     }
