@@ -38,5 +38,6 @@ urlpatterns = [
     url(r'^get-pulse-data/$', views.get_pulse),
     url(r'^remove/$', views.remove, name='view-remove'),
     url(r'^create-user/$', views.create_user, name='view-create-user'),
+    url(r'^add-mongo-agent/$', views.add_mongo_agent, name='view-add-mongo-agent'),
     #url(r'^cancel-converting/$', views.cancel_converting, name='cancel-converting'),
 ]
