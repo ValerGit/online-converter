@@ -157,17 +157,22 @@ def account(request):
 @login_required
 def graphs(request):
     if request.method == 'POST':
-        db_token = request.POST['token']
+        try:
+            data = json.loads(request.body)
+        except ValueError:
+            return HttpResponseBadRequest()
+
+        db_token = data['token']
         mongo_inst = InfluxTokens.objects.get(token=db_token)
         mongo_id = mongo_inst.id
         mongo_name = mongo_inst.db_name
         mongo_host = mongo_inst.db_adress
         mongo_user = mongo_inst.db_user
-        all_metrics = request.POST['metrics']
+        all_metrics = data['metrics']
 
         # connect to Influx
         client = InfluxDBClient(mongo_host, 8086, mongo_user, 'root')
-        client.create_database(mongo_id + mongo_name, True)
+        client.create_database("metrics", True)
         client = InfluxDBClient(database=mongo_id + mongo_name)
 
         for metric in all_metrics:
