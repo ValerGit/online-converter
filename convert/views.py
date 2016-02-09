@@ -14,9 +14,11 @@ from django.contrib.auth.decorators import login_required
 import json
 from convert import utils
 from convert.models import Database, ConvertedDatabase, InfluxTokens
-import datetime, hashlib
+import datetime
+import hashlib
 from influxdb import InfluxDBClient
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
 
 @login_required
@@ -172,7 +174,13 @@ def sendmetric(request):
             return HttpResponseBadRequest()
 
         # connect to Influx
-        client = InfluxDBClient('127.0.0.1', 8086, '', '', 'metrics')
+        client = InfluxDBClient(
+            settings.INFLUX_HOST,
+            settings.INFLUX_PORT,
+            settings.INFLUX_USER,
+            settings.INFLUX_PASS,
+            settings.INFLUX_DB
+        )
 
         try:
             for metric in all_metrics:
@@ -204,6 +212,16 @@ def graphs(request):
 
 @login_required
 def get_graph(request):
+    if request.method == 'GET':
+        id = request.GET.get('id')
+        if id is None:
+            return HttpResponseRedirect('/view-graphs/')
+        try:
+            db = Database.objects.get(id=id, user=request.user)
+        except InfluxTokens.DoesNotExist:
+            return HttpResponseRedirect('/view-graphs/')
+    else:
+        return HttpResponseRedirect('/view-graphs/')
     return render(request, 'internal/graphs.html')
 
 
