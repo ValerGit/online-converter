@@ -191,7 +191,7 @@ def sendmetric(request):
         except KeyError:
             return HttpResponseBadRequest()
         
-        return JsonResponse({'answ':'answ'})
+        return JsonResponse({'answ':'ok'})
 
 
 
