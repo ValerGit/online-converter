@@ -34,7 +34,32 @@
                             </div>
                             <div id="portlet2" class="panel-collapse collapse in">
                                 <div class="portlet-body">
-                                    <div id="flotRealTime" style="height: 320px;" class="flot-chart"></div>
+                                    <div id="current_connections" style="height: 320px;" class="flot-chart"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="portlet"><!-- /primary heading -->
+                            <div class="portlet-heading">
+                                <h3 class="portlet-title text-dark">
+                                    Глобальные блокировки
+                                </h3>
+
+                                <div class="portlet-widgets">
+                                    <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>
+                                    <span class="divider"></span>
+                                    <a data-toggle="collapse" data-parent="#accordion1" href="#portlet2"><i
+                                            class="ion-minus-round"></i></a>
+                                    <span class="divider"></span>
+                                    <a href="#" data-toggle="remove"><i class="ion-close-round"></i></a>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div id="portlet2" class="panel-collapse collapse in">
+                                <div class="portlet-body">
+                                    <div id="globalLock" style="height: 320px;" class="flot-chart"></div>
                                 </div>
                             </div>
                         </div>
@@ -59,58 +84,64 @@
             var data = [ [[1354586000000, 0], [1354586300000, 1]] ];
             var borderColor = '#f5f5f5';
 		    var bgColor = '#fff';
-            var plot = $.plot($('#flotRealTime'), data, {
-                series: {
-                    shadowSize: 0,
-                    lines : {
-                        show : true,
-                        fill : true,
-                        lineWidth : 2,
-                        steps : false
-                    }
-                },
-                colors: ['#5fbeaa'],
-                grid : {
-                    hoverable: true,
-                    clickable: true,
-                    borderColor: borderColor,
-                    tickColor: "#f9f9f9",
-                    borderWidth: 1,
-                    labelMargin: 10,
-                    backgroundColor: bgColor
-                },
-                yaxis : {
-                    tickColor : '#f5f5f5',
-                    font : {
-                        color : '#bdbdbd'
-                    }
-                },
-                xaxis : {
-                    tickColor : '#f5f5f5',
-                    font : {
-                        color : '#bdbdbd'
-                    },
-                    mode: "time",
-                    timeformat: "%m/%d %H:%M:%S",
-                    min: Date.now() - 60000,
-                    max: Date.now()
-                },
-                tooltip : true,
-                tooltipOpts : {
-                    content : "%s"
-                }
-			});
 
-            function updatePlot() {
-                plot.setData([ [[1354586000000, 0], [1354586300000, 1]] ]);
-                var axes = plot.getAxes();
-                axes.xaxis.options.max = Date.now();
-                axes.xaxis.options.min = Date.now() - 60000;
-                plot.setupGrid();
-                plot.draw();
-                setTimeout(updatePlot, $('html').hasClass('mobile-device') ? 1000 : 1000);
+            function plotIt(selector, metric) {
+                var plot = $.plot(selector, data, {
+                    series: {
+                        shadowSize: 0,
+                        lines : {
+                            show : true,
+                            fill : true,
+                            lineWidth : 2,
+                            steps : false
+                        }
+                    },
+                    colors: ['#5fbeaa'],
+                    grid : {
+                        hoverable: true,
+                        clickable: true,
+                        borderColor: borderColor,
+                        tickColor: "#f9f9f9",
+                        borderWidth: 1,
+                        labelMargin: 10,
+                        backgroundColor: bgColor
+                    },
+                    yaxis : {
+                        tickColor : '#f5f5f5',
+                        font : {
+                            color : '#bdbdbd'
+                        }
+                    },
+                    xaxis : {
+                        tickColor : '#f5f5f5',
+                        font : {
+                            color : '#bdbdbd'
+                        },
+                        mode: "time",
+                        timeformat: "%m/%d %H:%M:%S",
+                        min: Date.now() - 60000,
+                        max: Date.now()
+                    },
+                    tooltip : true,
+                    tooltipOpts : {
+                        content : "%s"
+                    }
+                });
+
+                function updatePlot() {
+                    plot.setData([ [[1354586000000, 0], [1354586300000, 1]] ]);
+                    var axes = plot.getAxes();
+                    axes.xaxis.options.max = Date.now();
+                    axes.xaxis.options.min = Date.now() - 60000;
+                    plot.setupGrid();
+                    plot.draw();
+                    setTimeout(updatePlot, $('html').hasClass('mobile-device') ? 1000 : 1000);
+                }
+                updatePlot();
             }
-            updatePlot();
+
+            plotIt($('#current_connections'), 'current_connections');
+            plotIt($('#globalLock'), 'globalLock');
 
         });
     </script>
