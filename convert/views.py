@@ -222,7 +222,7 @@ def get_graph(request):
             return HttpResponseRedirect('/view-graphs/')
     else:
         return HttpResponseRedirect('/view-graphs/')
-    return render(request, 'internal/graphs.html')
+    return render(request, 'internal/graphs.html', {'database': db})
 
 
 @login_required
