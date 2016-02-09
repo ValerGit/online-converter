@@ -68,7 +68,8 @@ def proceed_convert(request):
             for table in data['tables']:
                 for t in data['tables']:
                     if table['isEmbedded'] and table['embeddedIn'] == t['name'] and t['isEmbedded']:
-                        return JsonResponse({'status': 'bad', 'message': 'Нельзя производить конвертацию с вложенностью больше двух'})
+                        return JsonResponse(
+                            {'status': 'bad', 'message': 'Нельзя производить конвертацию с вложенностью больше двух'})
 
             result = convert_to_mongo.delay(to_celery)
             conv_db = ConvertedDatabase()
@@ -161,33 +162,33 @@ def graphs(request):
             data = json.loads(request.body)
         except ValueError:
             return HttpResponseBadRequest()
-
-        db_token = data['token']
-        mongo_inst = InfluxTokens.objects.get(token=db_token)
-        mongo_id = mongo_inst.id
-        mongo_name = mongo_inst.db_name
-        mongo_host = mongo_inst.db_adress
-        mongo_user = mongo_inst.db_user
-        all_metrics = data['metrics']
+        try:
+            db_token = data['token']
+            mongo_inst = InfluxTokens.objects.get(token=db_token)
+            mongo_id = mongo_inst.database
+            all_metrics = data['metrics']
+        except KeyError:
+            return HttpResponseBadRequest()
 
         # connect to Influx
-        client = InfluxDBClient(mongo_host, 8086, mongo_user, 'root')
-        client.create_database("metrics", True)
-        client = InfluxDBClient(database=mongo_id + mongo_name)
+        client = InfluxDBClient('127.0.0.1', 8086, 'root', '', 'metrics')
 
-        for metric in all_metrics:
-            insert_info = [
-                {
-                    "measurement": "metrics",
-                    "time": datetime.datetime.now(),
-                    "fields": {
-                        "metric": metric['name'],
-                        "database": mongo_id,
-                        "value": metric['value']
+        try:
+            for metric in all_metrics:
+                insert_info = [
+                    {
+                        "measurement": "metrics",
+                        "time": datetime.datetime.now(),
+                        "fields": {
+                            "metric": float(metric['name']),
+                            "database": mongo_id,
+                            "value": metric['value']
+                        }
                     }
-                }
-            ]
-        client.write_points(insert_info)
+                ]
+                client.write_points(insert_info)
+        except KeyError:
+            return HttpResponseBadRequest()
 
     return render(request, 'internal/graphs.html')
 
