@@ -156,7 +156,7 @@ def account(request):
 
 
 @login_required
-def graphs(request):
+def sendmetric(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
@@ -189,8 +189,9 @@ def graphs(request):
                 client.write_points(insert_info)
         except KeyError:
             return HttpResponseBadRequest()
+        
+        return JsonResponse({'answ':'answ'})
 
-    return render(request, 'internal/graphs.html')
 
 
 @login_required
