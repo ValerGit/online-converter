@@ -1,4 +1,5 @@
 {% extends "external/base.html" %}
+{% load widget_tweaks %}
 {% block main %}
     <form method="post" enctype="multipart/form-data" action="{% url 'view-sign-in' %}">
         {% csrf_token %}
@@ -16,7 +17,7 @@
                 <div class="col s4 offset-s1">
                     <div class="input-field col s12">
                         {{ form.username }}
-                        <label for="email">Имя пользователя</label>
+                        <label for="id_username">Имя пользователя</label>
                     </div>
                 </div>
             </div>
@@ -24,7 +25,7 @@
                 <div class="col s4 offset-s1">
                     <div class="input-field col s12">
                         {{ form.password }}
-                        <label for="password">Пароль</label>
+                        <label for="id_password">Пароль</label>
                     </div>
                 </div>
             </div>

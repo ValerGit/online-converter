@@ -163,23 +163,25 @@ def graphs(request):
         mongo_name = mongo_inst.db_name
         mongo_host = mongo_inst.db_adress
         mongo_user = mongo_inst.db_user
-        param_name = request.POST['metrics']
-        param_value = request.POST['metr_value']
+        all_metrics = request.POST['metrics']
 
         # connect to Influx
         client = InfluxDBClient(mongo_host, 8086, mongo_user, 'root')
         client.create_database(mongo_id + mongo_name, True)
         client = InfluxDBClient(database=mongo_id + mongo_name)
 
-        insert_info = [
-            {
-                "measurement": param_name,
-                "time": datetime.datetime.now(),
-                "fields": {
-                    "value": param_value
+        for metric in all_metrics:
+            insert_info = [
+                {
+                    "measurement": "metrics",
+                    "time": datetime.datetime.now(),
+                    "fields": {
+                        "metric": metric['name'],
+                        "database": mongo_id,
+                        "value": metric['value']
+                    }
                 }
-            }
-        ]
+            ]
         client.write_points(insert_info)
 
     return render(request, 'internal/graphs.html')
@@ -439,10 +441,15 @@ def add_mongo_agent(request):
         if id is None:
             do_download = 0
         else:
-            db_info = Database.objects.get(id=id, user=request.user, is_deleted=0, type="MO")
+            try:
+                db_info = Database.objects.get(id=id, user=request.user, is_deleted=0, type="MO")
+            except Exception:
+                return HttpResponseBadRequest()
+
             if db_info is None:
                 do_download = 0
-                return JsonResponse({'status': 'bad', 'info': 'No db provided'})
+                return HttpResponseBadRequest()
+
             already_has_token = InfluxTokens.objects.filter(database=id)
             if not already_has_token:
                 generate_token = InfluxTokens()
@@ -451,7 +458,5 @@ def add_mongo_agent(request):
                 generate_token.token = hashlib.sha224(str_for_token).hexdigest()
                 generate_token.save()
                 return JsonResponse({'status': 'ok', 'info': 'Brand new token'})
-
         all_mongos = Database.objects.filter(type="MO", user=request.user, is_deleted=0)
         return render(request, 'internal/manage.html', {'all_mongos': all_mongos, 'download': do_download})
-
