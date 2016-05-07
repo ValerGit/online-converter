@@ -2,3 +2,4 @@ myvenv/
 .idea
 *.pyc
 .DS_Store
+*.log

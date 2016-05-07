@@ -1,6 +1,6 @@
 {% extends "internal/base-account.html" %}
 {% block additional-css %}
-    <link href="/plugins/jquery.steps/demo/css/jquery.steps.css" rel="stylesheet" type="text/css" />
+    <link href="/plugins/jquery.steps/demo/css/jquery.steps.css" rel="stylesheet" type="text/css"/>
     <link href="/plugins/sweetalert/dist/sweetalert.css" rel="stylesheet" type="text/css">
 
 {% endblock %}
@@ -26,8 +26,8 @@
                                                 <div class="col-md-9">
 
                                                     <div class="form-group clearfix">
-                                                        <label class="col-lg-4 control-label " for="my-name"> Название
-                                                            БД
+                                                        <label class="col-lg-4 control-label " for="my-name">
+                                                            Название БД*
                                                         </label>
 
                                                         <div class="col-lg-8">
@@ -38,7 +38,8 @@
                                                     </div>
 
                                                     <div class="form-group clearfix">
-                                                        <label class="col-lg-4 control-label" for="my-host"> Адрес сервера (host[:port])
+                                                        <label class="col-lg-4 control-label" for="my-host">
+                                                            Адрес сервера (host[:port])*
                                                         </label>
 
                                                         <div class="col-lg-8">
@@ -50,7 +51,7 @@
 
                                                     <div class="form-group clearfix">
                                                         <label class="col-lg-4 control-label" for="my-user">
-                                                            Пользователь
+                                                            Имя пользователя*
                                                         </label>
 
                                                         <div class="col-lg-8">
@@ -84,8 +85,8 @@
                                                 <div class="col-md-9">
 
                                                     <div class="form-group clearfix">
-                                                        <label class="col-lg-4 control-label " for="mo-name"> Название
-                                                            БД
+                                                        <label class="col-lg-4 control-label " for="mo-name">
+                                                            Название БД*
                                                         </label>
 
                                                         <div class="col-lg-8">
@@ -96,7 +97,8 @@
                                                     </div>
 
                                                     <div class="form-group clearfix">
-                                                        <label class="col-lg-4 control-label" for="mo-host"> Адрес сервера (host[:port])
+                                                        <label class="col-lg-4 control-label" for="mo-host">
+                                                            Адрес сервера (host[:port])*
                                                         </label>
 
                                                         <div class="col-lg-8">
@@ -108,7 +110,7 @@
 
                                                     <div class="form-group clearfix">
                                                         <label class="col-lg-4 control-label" for="mo-user">
-                                                            Пользователь
+                                                            Имя пользователя
                                                         </label>
 
                                                         <div class="col-lg-8">
@@ -138,7 +140,7 @@
                                                 <div class="checkbox checkbox-primary">
                                                     <input id="checkbox-h" type="checkbox">
                                                     <label for="checkbox-h">
-                                                        I agree with the Terms and Conditions.
+                                                        Я подтверждаю правильность введенных данных*
                                                     </label>
                                                 </div>
                                             </div>
@@ -146,6 +148,9 @@
                                     </section>
                                 </div>
                             </form>
+                            <h7>
+                            Поля, помеченные звездочкой (*) обязательны для заполнения
+                                </h7>
                         </div>
                     </div>
                 </div>
@@ -216,7 +221,7 @@
                 var finalJson = {
                     'from': myJson, 'to': moJson
                 };
-                if ((myhost == '') || (myuser == '') || (mydb == '') ||  (modb == '') || (mohost == '')) {
+                if ((myhost == '') || (myuser == '') || (mydb == '') || (modb == '') || (mohost == '')) {
                     swal("Вы указали не все параметры");
                 } else {
                     $.post("/connect/", JSON.stringify(finalJson),

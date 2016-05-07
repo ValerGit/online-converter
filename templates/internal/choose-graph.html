@@ -17,43 +17,42 @@
         <div class="content">
             <div class="container">
                 <div class="row">
-                        <div class="col-sm-12">
-                            <div class="card-box">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <h4 class="m-t-0 header-title"><b> Отслеживаемые базы данных (Выберите базу для просмотра графиков)</b></h4>
+                    <div class="col-sm-12">
+                        <div class="card-box">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h4 class="m-t-0 header-title"><b> Отслеживаемые базы данных (Выберите базу для
+                                        просмотра графиков)</b></h4>
 
-                                        <div class="p-20">
-                                            <div class="table-responsive">
-                                                <table class="table m-0">
-                                                    <thead>
+                                    <div class="p-20">
+                                        <div class="table-responsive">
+                                            <table class="table m-0">
+                                                <thead>
+                                                <tr>
+                                                    <th> База данных</th>
+                                                    <th> Token</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for db in databases %}
                                                     <tr>
-                                                        <th> База данных</th>
-                                                        <th> Token</th>
+                                                        <td>
+                                                            <a href="{% url 'view-get-graph' %}?id={{ db.database.id }}">
+                                                                {{ db.database.db_name }}
+                                                            </a>
+                                                        </td>
+                                                        <td>{{ db.token }}</td>
                                                     </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {% for db in databases %}
-                                                            <tr>
-                                                                <td>
-                                                                    <a href="{% url 'view-get-graph' %}?id={{ db.database.id }}">
-                                                                        {{ db.database.db_name }}
-                                                                    </a>
-                                                                </td>
-                                                                <td>{{ db.token }}</td>
-                                                            </tr>
-                                                        {% endfor %}
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
                                         </div>
-
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
         </div>
     </div>

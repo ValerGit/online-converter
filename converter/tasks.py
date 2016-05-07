@@ -1,27 +1,19 @@
 from __future__ import absolute_import
-
 import os
-
 from celery import Celery
-
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'converter.settings')
-
 from django.conf import settings
-
-app = Celery('converter')
-
-app.config_from_object('django.conf:settings')
-app.conf.update(
-    CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend',
-)
-app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
-
-
 from celery.utils.log import get_task_logger
 import MySQLdb
 import MySQLdb.cursors
 from pymongo import MongoClient
 
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'converter.settings')
+app = Celery('converter')
+app.config_from_object('django.conf:settings')
+app.conf.update(
+    CELERY_RESULT_BACKEND='djcelery.backends.database:DatabaseBackend',
+)
+app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 logger = get_task_logger(__name__)
 
 

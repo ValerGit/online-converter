@@ -25,8 +25,8 @@
     <div class="topbar">
         <div class="topbar-left">
             <div class="text-center">
-                <a href="{% url 'view-account' %}" class="logo"><i class=" icon-compass icon-c-logo"></i>
-                    <span>Трансформатор</span></a>
+                <a href="{% url 'view-home' %}" class="logo"><i class=" icon-compass icon-c-logo"></i>
+                    <span>ИС ТБД</span></a>
             </div>
         </div>
         <div class="navbar navbar-default" role="navigation">
@@ -45,7 +45,6 @@
                             </a>
                         </li>
                         <li><a href="{% url 'view-profile' %}"><i class="ti-user m-r-5"></i> {{ user.username }}</a></li>
-{#                        <li><a><i class="ti-settings m-r-5"></i> Настройки</a></li>#}
                         <li><a href="{% url 'view-logout' %}" ><i class="ti-power-off m-r-5"></i> Выход</a></li>
                     </ul>
                 </div>
@@ -79,23 +78,27 @@
                             <i class="ion-arrow-graph-up-right"></i>
                             <span> Отслеживать Ваши БД </span> </a>
                         <ul class="list-unstyled">
-                            <li class="{% block activate-manage %} {% endblock %}"><a href="{% url 'view-add-mongo-agent' %}">
-                                Следить за новой БД</a>
+                            <li class="{% block activate-manage %} {% endblock %}">
+                                <a href="{% url 'view-add-mongo-agent' %}">
+                                    Следить за новой БД
+                                </a>
                             </li>
-                            <li class="{% block activate-graphs %} {% endblock %}"><a href="{% url 'view-graphs' %}">Графики
-                                состояния БД</a></li>
-                            <li><a href="#">Активность пользователей</a></li>
+                            <li class="{% block activate-graphs %} {% endblock %}">
+                                <a href="{% url 'view-graphs' %}">
+                                    Графики состояния
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
                     <li class="text-muted menu-title">Трансляция БД</li>
                     <li><a href="{% url 'view-choose-ports' %}"
                            class=" waves-effect {% block activate-translation %} {% endblock %}">
-                        <i class="ti-export"></i> Добавить новые БД для трансляции</a>
+                        <i class="ti-export"></i> Добавить новые БД </a>
                     </li>
                     <li><a href="{% url 'view-choose-tables' %}"
                            class="waves-effect {% block activate-exist %} {% endblock %}">
-                        <i class="ti-rocket"></i>  Транслировать добавленные БД</a>
+                        <i class="ti-rocket"></i> Ковертировать БД</a>
                     </li>
 
 
@@ -108,7 +111,8 @@
     {% block right-content %}
     {% endblock %}
     <footer class="footer text-right">
-        © 2016
+        2016 ©
+        <span  href="#!"> Информационная система объектно-реляционной трансформации баз данных.</span>
     </footer>
 </div>
 

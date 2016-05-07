@@ -38,7 +38,7 @@
                     </div>
                 {% else %}
                     <div class="row">
-                        <div class="col-sm-12">
+                        <div class="col-sm-10">
                             <div class="card-box">
                                 <div class="row">
                                     <div class="col-lg-12">
@@ -51,7 +51,7 @@
                                                     <tr>
                                                         <th> Источник</th>
                                                         <th> Целевая БД</th>
-                                                        <th> Пользователь</th>
+{#                                                        <th> Пользователь</th>#}
                                                         <th> Дата конвертации</th>
                                                     </tr>
                                                     </thead>
@@ -60,7 +60,7 @@
                                                         <tr>
                                                             <td>{{ a.database_from.db_name }}</td>
                                                             <td>{{ a.database_to.db_name }}</td>
-                                                            <td>{{ a.user }}</td>
+{#                                                            <td>{{ a.user }}</td>#}
                                                             <td>{{ a.date }}</td>
                                                         </tr>
                                                     {% endfor %}
@@ -76,12 +76,12 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-8">
+                        <div class="col-lg-12">
                             <div class="portlet">
 
                                 <!-- /primary heading -->
                                 <div class="portlet-heading">
-                                    <h7 class="portlet-title text-dark"> Активность за прошедший год </h7>
+                                    <h7 class="portlet-title text-dark"> График активности за прошедший год </h7>
 
                                     <div class="portlet-widgets">
                                         <a href="javascript:;" data-toggle="reload"><i class="ion-refresh"></i></a>

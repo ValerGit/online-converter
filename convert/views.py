@@ -201,6 +201,7 @@ def sendmetric(request):
 
         return JsonResponse({'answ': 'ok'})
 
+
 @login_required
 def graphs(request):
     databases = InfluxTokens.objects.filter(database__user=request.user)
@@ -252,8 +253,9 @@ def get_metric(request):
                 settings.INFLUX_DB
             )
 
-            result = client.query("select * from metrics where metric='%s' and time > %d and time < %d and \"database\" = %d"
-                                  % (metric, time_from, time_to, db_id))
+            result = client.query(
+                "select * from metrics where metric='%s' and time > %d and time < %d and \"database\" = %d"
+                % (metric, time_from, time_to, db_id))
             return JsonResponse(list(result.get_points(measurement='metrics')), safe=False)
         else:
             return HttpResponseBadRequest()
@@ -524,8 +526,13 @@ def add_mongo_agent(request):
                 do_download = 0
                 return HttpResponseBadRequest()
 
-            already_has_token = InfluxTokens.objects.get(database=id).token
-            if not already_has_token:
+            try:
+                already_has_token = InfluxTokens.objects.get(database=id)
+                already_has_token = already_has_token.token
+            except InfluxTokens.DoesNotExist:
+                already_has_token = None
+
+            if already_has_token is None:
                 generate_token = InfluxTokens()
                 generate_token.database = db_info
                 str_for_token = db_info.db_user + db_info.db_name + db_info.db_password

@@ -2,64 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Супер транслятор</title>
+    <title>ИС ТБД</title>
     <link rel="stylesheet" href="/css/materialize.min.css">
     <link rel="stylesheet" href="/css/icon.css">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body class="white">
 {% block rigistered_user %}
-<nav class="nav-wrapper white">
-    <div class="row">
-        <div class="col s3 offset-s1">
-            <a href="{% url 'view-home' %}" class="brand-logo black-text light italic" >Трансформатор</a>
+    <nav class="nav-wrapper white">
+        <div class="row">
+            <div class="col s3 offset-s1">
+                <a href="{% url 'view-home' %}" class="brand-logo black-text light italic">ИС ТБД</a>
+            </div>
+            {% if user.is_authenticated %}
+                <div class="col s2 offset-s8">
+                    <ul id="nav-mobile" class="left hide-on-med-and-down">
+                        <li><a href="{% url "view-account" %}" class="black-text">В личный кабинет</a></li>
+                    </ul>
+                </div>
+                <div class="col s1">
+                    <ul id="nav-mobile" class="left hide-on-med-and-down">
+                        <li><a href="{% url 'view-logout' %}" class="black-text">Выход</a></li>
+                    </ul>
+                </div>
+            {% else %}
+                <div class="col s1 offset-s8">
+                    <ul id="nav-mobile" class="left hide-on-med-and-down">
+                        <li><a href="{% url 'view-sign-in' %}" class="black-text">Вход</a></li>
+                    </ul>
+                </div>
+                <div class="col s1 ">
+                    <ul id="nav-mobile" class="left hide-on-med-and-down">
+                        <li><a href="{% url 'view-sign-up' %}" class="black-text">Регистрация</a></li>
+                    </ul>
+                </div>
+            {% endif %}
         </div>
-        {% if user.is_authenticated %}
-            <div class="col s2 offset-s8">
-                <ul id="nav-mobile" class="left hide-on-med-and-down">
-                    <li><a href="{% url "view-account" %}" class="black-text">В личный кабинет</a></li>
-                </ul>
-            </div>
-            <div class="col s1">
-                <ul id="nav-mobile" class="left hide-on-med-and-down">
-                    <li><a href="{% url 'view-logout' %}" class="black-text">Выход</a></li>
-                </ul>
-            </div>
-        {% else %}
-            <div class="col s1 offset-s8">
-                <ul id="nav-mobile" class="left hide-on-med-and-down">
-                    <li><a href="{% url 'view-sign-in' %}" class="black-text">Вход</a></li>
-                </ul>
-            </div>
-            <div class="col s1 ">
-                <ul id="nav-mobile" class="left hide-on-med-and-down">
-                    <li><a href="{% url 'view-sign-up' %}" class="black-text">Регистрация</a></li>
-                </ul>
-            </div>
-        {% endif %}
-    </div>
-</nav>
+    </nav>
 {% endblock %}
 
 <main>
     {% block main %}
-        <div class="parallax-container mongo">
-            <div class="center-align"><img src="/images/Logo.png"></div>
-        </div>
-
-        <div class="container">
-            <div class="row">
-                <div class="col s12 center-align">
-                    <div class="divider"></div>
-                    <h3 class="special-font italic">Экономьте <span class="bold"> время и ресурсы </span>
-                        <span class="thin">  кэшируя данные в постреляционную БД</span>
-                    </h3>
-                </div>
+        <div class="section scrollspy">
+            <div class="mongo">
+                <div class="center-align"><img src="/images/logo.bmp" height="250"></div>
             </div>
+        </div>
+        <div class="container">
             <div class="row">
                 <div class="col s12">
                     <div class="center-align">
-                        <a href="{% url 'view-sign-up' %}" class="btn btn-large green darken-1">Зарегестрироваться
+                        <a href="{% url 'view-sign-up' %}" class="btn btn-large green darken-1">Зарегистрироваться
                             <i class="material-icons right">vpn_key</i>
                         </a>
                         <a href="#learn" class="btn btn-large white grey-text hero-btn">Узнать больше</a>
@@ -74,32 +67,35 @@
         <div class="spacer"></div>
         <div class="row center">
 
-            <h3 id="learn" class="thin center">Транслируйте свои БД и следите за их производительностью</h3>
+            <h3 id="learn" class="thin center">
+                Трансформируйте реляционные базы данных <br> в объектно-ориентированные
+
+            </h3>
 
             <div class="section"></div>
-            <div id="feature-table" >
-                <div class="col s4 offset-s4 feature-item">
+            <div id="feature-table">
+                <div class="col s6 offset-s3 feature-item">
                     <p class="flow-text green-text"><a class="green-text">Онлайн конвертация</a>
                         <i class="material-icons right purple-text">done</i>
                     </p>
                 </div>
-                <div class="col s4 offset-s4 feature-item">
-                    <p class="flow-text"><a class="green-text">Пульс данных</a>
+                <div class="col s6 offset-s3 feature-item">
+                    <p class="flow-text"><a class="green-text">Отслеживание метрик MongoDB</a>
                         <i class="material-icons right red-text">done</i>
                     </p>
                 </div>
-                <div class="col s4 offset-s4 feature-item">
-                    <p class="flow-text"><a class="green-text">Надежность</a>
+                <div class="col s6 offset-s3 feature-item">
+                    <p class="flow-text"><a class="green-text">Добавление пользователей MongoDB</a>
                         <i class="material-icons right blue-text">done</i>
                     </p>
                 </div>
-                <div class="col s4 offset-s4 feature-item">
-                    <p class="flow-text"><a class="green-text">Высокая скорость</a>
+                <div class="col s6 offset-s3 feature-item">
+                    <p class="flow-text"><a class="green-text">Высокая скорость трансляции</a>
                         <i class="material-icons right green-text">done</i>
                     </p>
                 </div>
-                <div class="col s4 offset-s4 feature-item">
-                    <p class="flow-text"><a class="green-text">Безопасность</a>
+                <div class="col s6 offset-s3 feature-item">
+                    <p class="flow-text"><a class="green-text">Безопасное хранение персональных данных</a>
                         <i class="material-icons right yellow-text">done</i>
                     </p>
                 </div>
@@ -112,37 +108,10 @@
 {% block bottom-footer %}
     <footer class="page-footer grey lighten-4">
         <div class="container row">
-            <div class="col s12 m6">
-                <div>
-                    <a class="grey-text">
-                        <h7>О нас</h7>
-                    </a>
-                </div>
-                <div>
-                    <a class="grey-text">
-                        <h7>Графики</h7>
-                    </a>
-                </div>
+            <div>
                 <div>
                     <a class="grey-text" href="mailto:v.pershenkova@gmail.com">
-                        <h7>Свяжись с нами</h7>
-                    </a>
-                </div>
-            </div>
-            <div class="col s12 m6">
-                <div>
-                    <a class="grey-text">
-                        <h7>FAQ</h7>
-                    </a>
-                </div>
-                <div>
-                    <a class="grey-text">
-                        <h7>Выйти</h7>
-                    </a>
-                </div>
-                <div>
-                    <a class="grey-text">
-                        <h7>Узнать больше</h7>
+                        <h7>Связь с разработчиками</h7>
                     </a>
                 </div>
             </div>
@@ -150,7 +119,7 @@
         <div class="footer-copyright">
             <div class="container grey-text">
                 © 2016
-                <span class="right" href="#!">Сделано в Москве</span>
+                <span class="right" href="#!">МГТУ им.Баумана кафедра СОИУ</span>
             </div>
         </div>
     </footer>
@@ -162,9 +131,9 @@
 <script src="/js/script.js"></script>
 <script>
 
-$(document).ready(function () {
-    $('.parallax').parallax();
-});
+    $(document).ready(function () {
+        $('.parallax').parallax();
+    });
 
 
 </script>

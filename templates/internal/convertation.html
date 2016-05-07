@@ -36,38 +36,49 @@
 
 
                 {% if need_db_choose %}
-                    <p class="text-muted m-b-40 font-13 m-h-40"> Выберите MySQL БД для конвертации</p>
                     <div class="row">
-                        <div class="col-md-8">
-                            <select id="from-db" class="form-control select2">
-                                {% for x in all_mysql %}
-                                    <option value="{{ x.id }}">
-                                        {{ x.db_name }}
-                                    </option>
-                                {% endfor %}
-                            </select>
+                        <div class="col-lg-8">
+                            <div class="card-box">
+                                <p class="text-muted m-b-40 font-13 m-h-40"> Выберите MySQL БД для конвертации</p>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <select id="from-db" class="form-control select2">
+                                            {% for x in all_mysql %}
+                                                <option value="{{ x.id }}">
+                                                    {{ x.db_name }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <p class="text-muted m-b-20 font-13 m-h-20"></p>
+
+                                <p class="text-muted m-b-40 font-13 m-h-40"> Выберите MongoDB </p>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <select id="to-db" class="form-control select2">
+                                            {% for x in all_mongos %}
+                                                <option value="{{ x.id }}">
+                                                    {{ x.db_name }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <p class="text-muted m-b-20 font-13 m-h-40"></p>
+
+                                <div class="col-md-7 col-md-offset-5">
+                                    <button type="button" id="set-dbs"
+                                            class="btn btn-block btn-success waves-effect waves-light">
+                                        <h5 class="text-white"><i class="fa fa-check"></i>
+                                            Выбрать </h5>
+                                    </button>
+                                </div>
+                                <p class="text-muted m-b-20 font-13 m-h-50"></p>
+                            </div>
                         </div>
-                    </div>
-                    <p class="text-muted m-b-20 font-13 m-h-20"></p>
-                    <p class="text-muted m-b-40 font-13 m-h-40"> Выберите MongoDB </p>
-                    <div class="row">
-                        <div class="col-md-8">
-                            <select id="to-db" class="form-control select2">
-                                {% for x in all_mongos %}
-                                    <option value="{{ x.id }}">
-                                        {{ x.db_name }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <p class="text-muted m-b-20 font-13 m-h-50"></p>
-                    <div class="col-md-5 col-md-offset-3">
-                        <button type="button" id="set-dbs"
-                                class="btn btn-block btn-success waves-effect waves-light">
-                            <h5 class="text-white"><i class="fa fa-check"></i>
-                                Выбрать </h5>
-                        </button>
                     </div>
                 {% else %}
                     <div class="col-md-12">
@@ -147,14 +158,15 @@
         <button type="button" class="close" onclick="Custombox.close();">
             <span>&times;</span><span class="sr-only">Close</span>
         </button>
-        <h4 class="custom-modal-title">Пример трасляции</h4>
+        <h4 class="custom-modal-title">Пример конвертации</h4>
         <img src="/images/tutor.png" alt="image" class="img-responsive">
 
-        <div class="custom-modal-text">
-            Если необходимо выбрать всю информацию о форумах и их создателях, то возможна следующая структура
-            построения таблиц в MongoDB - вторичным ключом таблицы форумы на таблицу пользователей
-            будет являться «id создателя» и по нему будет выбрана соответствующая запись (id пользователя = id
-            создателя)
+        <div class="custom-modal-text text-left">
+            <b>Задача:</b> выбрать всю информацию о формуах и из создетелях
+            <br>
+            <br>
+            <b>Решение:</b> по вторичному ключу user таблицы Forum будут
+            выбраны пользователи из таблицы User (т.е. Forum.user = User.email)
         </div>
     </div>
 
