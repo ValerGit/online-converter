@@ -16,7 +16,8 @@
         <div class="row">
             <div class="col s4 offset-s1">
                 <div class="input-field col s12">
-                    {% render_field form.username placeholder=user.username value=""%}
+                    {{ form.username.errors }}
+                    {% render_field form.username placeholder=user.username value="" %}
                     <label for="input_text">Имя пользователя</label>
                 </div>
             </div>
@@ -24,8 +25,18 @@
         <div class="row">
             <div class="col s4 offset-s1">
                 <div class="input-field col s12">
-                    {% render_field form.email placeholder=user.email value=""%}
+                    {% render_field form.email placeholder=user.email value="" %}
                     <label for="input_text">Email</label>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col s4 offset-s1">
+                <div class="input-field col s12">
+                    {% render_field form.pass_new value="" %}
+                    <label for="password2">Новый пароль</label>
                 </div>
             </div>
         </div>
@@ -33,9 +44,13 @@
         <div class="row">
             <div class="col s4 offset-s1">
                 <div class="input-field col s12">
-                    {% render_field form.pass_new value=""%}
-                    <label for="password2">Изменить пароль</label>
+                    {{ form.old_pass.errors }}
+                    {% render_field form.old_pass value="" %}
+                    <label for="password_old"> Введите старый пароль для подтверждения </label>
                 </div>
+            </div>
+            <div class="col s4">
+                <a><i class="small material-icons starclass active">warning</i></a>
             </div>
         </div>
 

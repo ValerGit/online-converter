@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from models import Database
 
 
 class UserForms(forms.Form):
@@ -25,6 +24,7 @@ class SettingsForm(forms.Form):
     username = forms.CharField(label='Username', max_length=10, required=False)
     email = forms.CharField(widget=forms.EmailInput(), required=False)
     pass_new = forms.CharField(widget=forms.PasswordInput(), required=False)
+    old_pass = forms.CharField(widget=forms.PasswordInput(), required=False)
 
     def clean(self):
         cleaned_data = super(SettingsForm, self).clean()
@@ -33,6 +33,10 @@ class SettingsForm(forms.Form):
         except User.DoesNotExist:
             return
         self.add_error('username', 'Wrong username')
+        return
+        # if any(self.errors):
+        #     self.add_error('old_pass', "Wrong input!")
+        #     return
 
 
 class RegistrationForm(UserCreationForm):

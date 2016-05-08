@@ -51,7 +51,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'converter.wsgi.application'
-
+LOGIN_URL = '/signin/'
 
 DATABASES = {
     'default': {

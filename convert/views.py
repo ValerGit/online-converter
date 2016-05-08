@@ -2,8 +2,6 @@
 
 from django.shortcuts import render
 from converter.tasks import convert_to_mongo, create_user_mongo
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
 from forms import RegistrationForm, UserForms, SettingsForm
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
@@ -89,22 +87,22 @@ def proceed_convert(request):
         return HttpResponseBadRequest()
 
 
-# @login_required
+@login_required
 def profile(request):
     if request.method == 'POST':
         form = SettingsForm(request.POST, request.FILES)
         if form.is_valid():
-            if request.POST['username'] != '':
-                request.user.username = request.POST['username']
-            if request.POST['email'] != '':
-                request.user.email = request.POST['email']
-            if request.POST['pass_new'] != '':
-                request.user.password = request.POST['pass_new']
-                request.user.set_password(request.user.password)
-            request.user.save()
-            form = SettingsForm()
-    else:
-        form = SettingsForm()
+            if request.user.check_password(request.POST['old_pass']):
+                if request.POST['username'] != '':
+                    request.user.username = request.POST['username']
+                if request.POST['email'] != '':
+                    request.user.email = request.POST['email']
+                if request.POST['pass_new'] != '':
+                    request.user.password = request.POST['pass_new']
+                    request.user.set_password(request.user.password)
+                request.user.save()
+                return home(request)
+    form = SettingsForm()
     return render(request, 'external/profile.html', {'form': form})
 
 
