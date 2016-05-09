@@ -10,6 +10,7 @@ ALLOWED_HOSTS = []
 
 
 INSTALLED_APPS = (
+    'jet',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -91,3 +92,16 @@ INFLUX_PORT = 8086
 INFLUX_USER = ''
 INFLUX_PASS = ''
 INFLUX_DB = 'metrics'
+
+# Jet
+JET_SIDE_MENU_CUSTOM_APPS = [
+    ('auth', [
+        'Group',
+        'User',
+    ]),
+    ('convert', [
+        'Database',
+        'InfluxTokens',
+        'ConvertedDatabase',
+    ]),
+]

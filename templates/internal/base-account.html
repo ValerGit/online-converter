@@ -39,12 +39,7 @@
                         <span class="clearfix"></span>
                     </div>
                     <ul class="nav navbar-nav navbar-right pull-right">
-                        <li class="hidden-xs">
-                            <a href="#" id="btn-fullscreen" class="waves-effect waves-light">
-                                <i class="icon-size-fullscreen"></i>
-                            </a>
-                        </li>
-                        <li><a href="{% url 'view-profile' %}"><i class="ti-user m-r-5"></i> {{ user.username }}</a></li>
+                        <li><a href="{% url 'view-profile' %}"><i class="ti-user m-r-5"></i> Профиль {{ user.username }}</a></li>
                         <li><a href="{% url 'view-logout' %}" ><i class="ti-power-off m-r-5"></i> Выход</a></li>
                     </ul>
                 </div>

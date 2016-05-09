@@ -3,6 +3,7 @@ from django.contrib import admin
 from convert import views
 
 urlpatterns = [
+    url(r'^jet/', include('jet.urls', 'jet')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^profile/', views.profile, name='view-profile'),
     url(r'^converting/$', 'convert.views.proceed_convert', name='converting'),
